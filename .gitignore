@@ -53,4 +53,5 @@ dkms.conf
 
 design/cache
 design/backup
+.DS_Store**
 
