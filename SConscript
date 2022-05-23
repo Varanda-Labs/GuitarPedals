@@ -5,6 +5,6 @@ from building import *
 src = Glob('*.c')
 src += Glob('assets/*.c')
 
-group = DefineGroup('LVGL-demo', src, depend = ['PKG_USING_LV_MUSIC_DEMO'])
+group = DefineGroup('GuitarPedals', src, depend = ['PKG_USING_GUITAR_PEDALS'])
 
 Return('group')
