@@ -6,6 +6,7 @@
 #include "ui.h"
 #include "ui_helpers.h"
 #include "lv_style.h"
+#include "log.h"
 
 ///////////////////// VARIABLES ////////////////////
 lv_obj_t * ui_Screen1;
@@ -33,6 +34,8 @@ lv_obj_t * ui_BtBoardUp;
 lv_obj_t * ui_BtBoardDown;
 lv_obj_t * ui_BoardIcon;
 
+extern lv_indev_t * global_indev;
+
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
     #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
@@ -44,7 +47,33 @@ lv_obj_t * ui_BoardIcon;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
+{
+    static int start_y = -1;
+    lv_point_t point;
+    int e = lv_event_get_code(event);
 
+    switch(e)
+    {
+    case LV_EVENT_PRESSED:             /**< The object has been pressed*/
+        lv_indev_get_vect(global_indev, &point);
+        LOG("OnRightTopPanelContainerScrollBegin Pressed %d", point.y);
+        start_y = 0;
+        break;
+    case LV_EVENT_PRESSING:
+        lv_indev_get_vect(global_indev, &point);
+        start_y += point.y;
+        LOG("OnRightTopPanelContainerScrollBegin Position %d", start_y);
+        break;
+    case LV_EVENT_RELEASED:
+        LOG("OnRightTopPanelContainerScrollBegin Released");
+        start_y = -1;
+        break;
+
+    default:
+        break;
+    }
+}
 ///////////////////// SCREENS ////////////////////
 void ui_Screen1_screen_init(void)
 {
@@ -54,6 +83,8 @@ void ui_Screen1_screen_init(void)
     ui_Screen1 = lv_obj_create(NULL);
 
     lv_obj_clear_flag(ui_Screen1, LV_OBJ_FLAG_SCROLLABLE);
+    //lv_obj_add_flag(ui_Screen1, LV_OBJ_FLAG_SCROLLABLE);
+
 
     lv_obj_set_style_bg_color(ui_Screen1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Screen1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -89,7 +120,8 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_BoardContainer, 11);
     lv_obj_set_y(ui_BoardContainer, 167);
 
-    lv_obj_clear_flag(ui_BoardContainer, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_BoardContainer, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_scrollbar_mode(ui_BoardContainer, LV_SCROLLBAR_MODE_OFF);
 
     lv_obj_set_style_bg_color(ui_BoardContainer, lv_color_hex(0x47DFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_BoardContainer, 64, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -137,12 +169,18 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_RightTopPanelContainer, 425);
     lv_obj_set_y(ui_RightTopPanelContainer, 19);
 
-    lv_obj_clear_flag(ui_RightTopPanelContainer, LV_OBJ_FLAG_SCROLLABLE);
+    //lv_obj_clear_flag(ui_RightTopPanelContainer, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_RightTopPanelContainer, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_set_style_bg_color(ui_RightTopPanelContainer, lv_color_hex(0x47DFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_RightTopPanelContainer, 64, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_RightTopPanelContainer, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_RightTopPanelContainer, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    //lv_obj_add_event_cb(ui_RightTopPanelContainer, OnRightTopPanelContainerScrollBegin, LV_EVENT_SCROLL_BEGIN, NULL);   /*Assign an event callback*/
+    lv_obj_add_event_cb(ui_RightTopPanelContainer, OnRightTopPanelContainerScrollBegin, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
+
+
 
     // ui_LeftArrowPadels
 
@@ -214,6 +252,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_add_flag(ui_PedalAvIndex0, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_PedalAvIndex0, LV_OBJ_FLAG_SCROLLABLE);
 
+
     // ui_PedalAvIndex1
 
     ui_PedalAvIndex1 = lv_img_create(ui_Screen1);
@@ -258,7 +297,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BoardPedalIndex0
 
-    ui_BoardPedalIndex0 = lv_img_create(ui_Screen1);
+    ui_BoardPedalIndex0 = lv_img_create(ui_BoardContainer);
     lv_img_set_src(ui_BoardPedalIndex0, &ui_img_pedal_echo_png);
 
     lv_obj_set_width(ui_BoardPedalIndex0, LV_SIZE_CONTENT);
@@ -272,7 +311,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BoardPedalIndex1
 
-    ui_BoardPedalIndex1 = lv_img_create(ui_Screen1);
+    ui_BoardPedalIndex1 = lv_img_create(ui_BoardContainer);
     lv_img_set_src(ui_BoardPedalIndex1, &ui_img_pedal_dist_png);
 
     lv_obj_set_width(ui_BoardPedalIndex1, LV_SIZE_CONTENT);
@@ -286,7 +325,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BoardPedalIndex2
 
-    ui_BoardPedalIndex2 = lv_img_create(ui_Screen1);
+    ui_BoardPedalIndex2 = lv_img_create(ui_BoardContainer);
     lv_img_set_src(ui_BoardPedalIndex2, &ui_img_pedal_volume_png);
 
     lv_obj_set_width(ui_BoardPedalIndex2, LV_SIZE_CONTENT);
@@ -297,6 +336,20 @@ void ui_Screen1_screen_init(void)
 
     lv_obj_add_flag(ui_BoardPedalIndex2, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_BoardPedalIndex2, LV_OBJ_FLAG_SCROLLABLE);
+
+    // ui_BoardPedalIndex3
+
+    ui_PedalAvIndex3 = lv_img_create(ui_BoardContainer);
+    lv_img_set_src(ui_PedalAvIndex3, &ui_img_pedal_compr_png);
+
+    lv_obj_set_width(ui_PedalAvIndex3, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_PedalAvIndex3, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_PedalAvIndex3, 301);
+    lv_obj_set_y(ui_PedalAvIndex3, 171);
+
+    lv_obj_add_flag(ui_PedalAvIndex3, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_PedalAvIndex3, LV_OBJ_FLAG_SCROLLABLE);
 
     // ui_ScreenIcon
 
