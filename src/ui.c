@@ -255,6 +255,11 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_border_color(ui_BoardContainer, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_BoardContainer, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    // MV:
+    lv_obj_set_scroll_snap_y(ui_BoardContainer, LV_SCROLL_SNAP_CENTER);
+
+    // ui_BoardPedalIndex13
+
     // ui_BoardHContainer00
 
     ui_BoardHContainer00 = lv_obj_create(ui_BoardContainer);
@@ -274,6 +279,9 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_bg_opa(ui_BoardHContainer00, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_BoardHContainer00, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_BoardHContainer00, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    // MV:
+    lv_obj_set_scroll_snap_x(ui_BoardHContainer00, LV_SCROLL_SNAP_NONE);
 
     // ui_BoardPedalIndex0000
 
@@ -391,6 +399,9 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_border_color(ui_BoardHContainer01, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_BoardHContainer01, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    // MV:
+    lv_obj_set_scroll_snap_x(ui_BoardHContainer01, LV_SCROLL_SNAP_NONE);
+
     // ui_BoardPedalIndex2
 
     ui_BoardPedalIndex2 = lv_img_create(ui_BoardHContainer01);
@@ -442,6 +453,9 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_bg_opa(ui_BoardHContainer02, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_BoardHContainer02, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_BoardHContainer02, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    // MV:
+    lv_obj_set_scroll_snap_x(ui_BoardHContainer02, LV_SCROLL_SNAP_NONE);
 
     // ui_BoardPedalIndex13
 
@@ -823,7 +837,6 @@ void ui_Screen1_screen_init(void)
 
     lv_obj_add_flag(ui_BoardPedalIndex12, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_BoardPedalIndex12, LV_OBJ_FLAG_SCROLLABLE);
-
 }
 
 void ui_init(void)
