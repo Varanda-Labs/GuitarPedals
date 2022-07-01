@@ -1,7 +1,19 @@
-// SquareLine LVGL GENERATED FILE
-// EDITOR VERSION: SquareLine Studio 1.0.5
-// LVGL VERSION: 8.2
-// PROJECT: SquareLine_Project
+/***************************************************************
+ *
+ *                 This code is part of GuitarPedals
+ *
+ * Copyrights 2022 - Varanda Labs Inc.
+ *
+ * License:
+ *   Creative Commons: CC BY-NC-SA 4.0
+ *   Attribution-NonCommercial-ShareAlike 4.0 International
+ *   https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *
+ *   Note: for purchasing a commertial license contact:
+ *     m@varanda.ca
+ *
+ ***************************************************************
+ */
 
 #ifndef _SQUARELINE_PROJECT_UI_H
 #define _SQUARELINE_PROJECT_UI_H
@@ -16,7 +28,7 @@ extern "C" {
 #include "lvgl/lvgl.h"
 #endif
 
-extern lv_obj_t * ui_Screen1;
+extern lv_obj_t * ui_ScreenBoards;
 extern lv_obj_t * ui_labelPadels;
 extern lv_obj_t * ui_LabelBoard;
 extern lv_obj_t * ui_RightTopPanelContainer;

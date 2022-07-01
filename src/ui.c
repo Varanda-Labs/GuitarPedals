@@ -1,15 +1,29 @@
-// SquareLine LVGL GENERATED FILE
-// EDITOR VERSION: SquareLine Studio 1.0.5
-// LVGL VERSION: 8.2
-// PROJECT: SquareLine_Project
+/***************************************************************
+ *
+ *                 This code is part of GuitarPedals
+ *
+ * Copyrights 2022 - Varanda Labs Inc.
+ *
+ * License:
+ *   Creative Commons: CC BY-NC-SA 4.0
+ *   Attribution-NonCommercial-ShareAlike 4.0 International
+ *   https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *
+ *   Note: for purchasing a commertial license contact:
+ *     m@varanda.ca
+ *
+ ***************************************************************
+ */
 
 #include "ui.h"
 #include "ui_helpers.h"
 #include "lv_style.h"
 #include "log.h"
 
+#include "pedal.h"
+
 ///////////////////// VARIABLES ////////////////////
-lv_obj_t * ui_Screen1;
+lv_obj_t * ui_ScreenBoards;
 lv_obj_t * ui_labelPadels;
 lv_obj_t * ui_LabelBoard;
 lv_obj_t * ui_RightTopPanelContainer;
@@ -96,27 +110,27 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
     }
 }
 ///////////////////// SCREENS ////////////////////
-void ui_Screen1_screen_init(void)
+void ui_ScreenBoards_screen_init(void)
 {
 
-    // ui_Screen1
+    // ui_ScreenBoards
 
-    ui_Screen1 = lv_obj_create(NULL);
+    ui_ScreenBoards = lv_obj_create(NULL);
 
-    lv_obj_clear_flag(ui_Screen1, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_clear_flag(ui_ScreenBoards, LV_OBJ_FLAG_SCROLLABLE);
 
-    lv_obj_set_style_bg_color(ui_Screen1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_Screen1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_src(ui_Screen1, &ui_img_guitar_background_01_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_outline_color(ui_Screen1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_outline_opa(ui_Screen1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_color(ui_Screen1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_opa(ui_Screen1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_blend_mode(ui_Screen1, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_ScreenBoards, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ScreenBoards, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ui_ScreenBoards, &ui_img_guitar_background_01_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ui_ScreenBoards, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ui_ScreenBoards, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ui_ScreenBoards, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ui_ScreenBoards, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_blend_mode(ui_ScreenBoards, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     // ui_labelPadels
 
-    ui_labelPadels = lv_img_create(ui_Screen1);
+    ui_labelPadels = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_labelPadels, &ui_img_padels_label_png);
 
     lv_obj_set_width(ui_labelPadels, LV_SIZE_CONTENT);
@@ -130,7 +144,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_LabelBoard
 
-    ui_LabelBoard = lv_img_create(ui_Screen1);
+    ui_LabelBoard = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_LabelBoard, &ui_img_board_label_png);
 
     lv_obj_set_width(ui_LabelBoard, LV_SIZE_CONTENT);
@@ -144,7 +158,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_RightTopPanelContainer
 
-    ui_RightTopPanelContainer = lv_obj_create(ui_Screen1);
+    ui_RightTopPanelContainer = lv_obj_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_RightTopPanelContainer, 51);
     lv_obj_set_height(ui_RightTopPanelContainer, 116);
@@ -167,7 +181,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_LeftArrowPadels
 
-    ui_LeftArrowPadels = lv_img_create(ui_Screen1);
+    ui_LeftArrowPadels = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_LeftArrowPadels, &ui_img_left_arrow_png);
 
     lv_obj_set_width(ui_LeftArrowPadels, LV_SIZE_CONTENT);
@@ -181,7 +195,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_LeftArrowBoard
 
-    ui_LeftArrowBoard = lv_img_create(ui_Screen1);
+    ui_LeftArrowBoard = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_LeftArrowBoard, &ui_img_left_arrow_png);
 
     lv_obj_set_width(ui_LeftArrowBoard, LV_SIZE_CONTENT);
@@ -195,7 +209,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_RightArrowPedals
 
-    ui_RightArrowPedals = lv_img_create(ui_Screen1);
+    ui_RightArrowPedals = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_RightArrowPedals, &ui_img_right_arrow_png);
 
     lv_obj_set_width(ui_RightArrowPedals, LV_SIZE_CONTENT);
@@ -209,7 +223,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_RightArrowBoard
 
-    ui_RightArrowBoard = lv_img_create(ui_Screen1);
+    ui_RightArrowBoard = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_RightArrowBoard, &ui_img_right_arrow_png);
 
     lv_obj_set_width(ui_RightArrowBoard, LV_SIZE_CONTENT);
@@ -223,7 +237,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BoardCounter
 
-    ui_BoardCounter = lv_img_create(ui_Screen1);
+    ui_BoardCounter = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_BoardCounter, &ui_img_number_1_png);
 
     lv_obj_set_width(ui_BoardCounter, LV_SIZE_CONTENT);
@@ -239,7 +253,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BoardContainer
 
-    ui_BoardContainer = lv_obj_create(ui_Screen1);
+    ui_BoardContainer = lv_obj_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_BoardContainer, 414);
     lv_obj_set_height(ui_BoardContainer, 89);
@@ -555,7 +569,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_ScreenIcon
 
-    ui_ScreenIcon = lv_img_create(ui_Screen1);
+    ui_ScreenIcon = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_ScreenIcon, &ui_img_screen_icon_png);
 
     lv_obj_set_width(ui_ScreenIcon, LV_SIZE_CONTENT);
@@ -571,7 +585,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BtScreenUp
 
-    ui_BtScreenUp = lv_btn_create(ui_Screen1);
+    ui_BtScreenUp = lv_btn_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_BtScreenUp, 44);
     lv_obj_set_height(ui_BtScreenUp, 50);
@@ -596,7 +610,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BtScreenDown
 
-    ui_BtScreenDown = lv_btn_create(ui_Screen1);
+    ui_BtScreenDown = lv_btn_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_BtScreenDown, 44);
     lv_obj_set_height(ui_BtScreenDown, 50);
@@ -621,7 +635,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_RightBottomPanelContainer
 
-    ui_RightBottomPanelContainer = lv_obj_create(ui_Screen1);
+    ui_RightBottomPanelContainer = lv_obj_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_RightBottomPanelContainer, 51);
     lv_obj_set_height(ui_RightBottomPanelContainer, 116);
@@ -638,7 +652,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BtBoardUp
 
-    ui_BtBoardUp = lv_btn_create(ui_Screen1);
+    ui_BtBoardUp = lv_btn_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_BtBoardUp, 44);
     lv_obj_set_height(ui_BtBoardUp, 50);
@@ -663,7 +677,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BtBoardDown
 
-    ui_BtBoardDown = lv_btn_create(ui_Screen1);
+    ui_BtBoardDown = lv_btn_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_BtBoardDown, 44);
     lv_obj_set_height(ui_BtBoardDown, 50);
@@ -688,7 +702,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_BoardIcon
 
-    ui_BoardIcon = lv_img_create(ui_Screen1);
+    ui_BoardIcon = lv_img_create(ui_ScreenBoards);
     lv_img_set_src(ui_BoardIcon, &ui_img_boards_icon_png);
 
     lv_obj_set_width(ui_BoardIcon, LV_SIZE_CONTENT);
@@ -704,7 +718,7 @@ void ui_Screen1_screen_init(void)
 
     // ui_AvailableContainer
 
-    ui_AvailableContainer = lv_obj_create(ui_Screen1);
+    ui_AvailableContainer = lv_obj_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_AvailableContainer, 414);
     lv_obj_set_height(ui_AvailableContainer, 89);
@@ -845,7 +859,7 @@ void ui_init(void)
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
-    ui_Screen1_screen_init();
-    lv_disp_load_scr(ui_Screen1);
+    ui_ScreenBoards_screen_init();
+    lv_disp_load_scr(ui_ScreenBoards);
 }
 
