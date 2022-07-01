@@ -75,6 +75,9 @@ lv_obj_t * VolumeCloseButton;
 
 extern lv_indev_t * global_indev;
 
+void load_screen_up(lv_obj_t * screen);
+void load_screen_down(lv_obj_t * screen);
+
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
     #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
@@ -105,11 +108,11 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
         LOG("OnRightTopPanelContainerScrollBegin Position %d", start_y);
         if (start_y > 5) {
             start_y = 0;
-            lv_disp_load_scr(ScreenVolume);
+            load_screen_up(ScreenVolume);
         }
         if (start_y < -5) {
             start_y = 0;
-            lv_disp_load_scr(ScreenVolume);
+            load_screen_up(ScreenVolume);
         }
         break;
     case LV_EVENT_RELEASED:
@@ -870,7 +873,7 @@ static void ui_event_CloseButton(lv_event_t * e)
 //    lv_event_code_t event = lv_event_get_code(e);
 //    lv_obj_t * ta = lv_event_get_target(e);
     if (e->code == LV_EVENT_CLICKED) {
-       lv_disp_load_scr(ui_ScreenBoards);
+       load_screen_down(ui_ScreenBoards);
     }
     //
 }
@@ -946,6 +949,16 @@ void ScreenVolume_screen_init(void)
     lv_obj_set_align(label, LV_ALIGN_CENTER);
 }
 
+void load_screen_up(lv_obj_t * screen)
+{
+    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, 0);
+}
+
+void load_screen_down(lv_obj_t * screen)
+{
+    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, 0);
+}
+
 void ui_init(void)
 {
     lv_disp_t * dispp = lv_disp_get_default();
@@ -958,6 +971,7 @@ void ui_init(void)
     ScreenVolume_screen_init();
 
     lv_disp_load_scr(ui_ScreenBoards);
+    //load_screen_down(ui_ScreenBoards);
 }
 
 
