@@ -67,7 +67,11 @@ lv_obj_t * ui_BoardPedalIndex7;
 lv_obj_t * ui_BoardPedalIndex8;
 lv_obj_t * ui_BoardPedalIndex9;
 
-
+// --- Volume Pedal ---
+lv_obj_t * ScreenVolume;
+lv_obj_t * VolumeLabel;
+lv_obj_t * VolumeSlider;
+lv_obj_t * VolumeCloseButton;
 
 extern lv_indev_t * global_indev;
 
@@ -99,6 +103,14 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
         lv_indev_get_vect(global_indev, &point);
         start_y += point.y;
         LOG("OnRightTopPanelContainerScrollBegin Position %d", start_y);
+        if (start_y > 5) {
+            start_y = 0;
+            lv_disp_load_scr(ScreenVolume);
+        }
+        if (start_y < -5) {
+            start_y = 0;
+            lv_disp_load_scr(ScreenVolume);
+        }
         break;
     case LV_EVENT_RELEASED:
         LOG("OnRightTopPanelContainerScrollBegin Released");
@@ -853,13 +865,99 @@ void ui_ScreenBoards_screen_init(void)
     lv_obj_clear_flag(ui_BoardPedalIndex12, LV_OBJ_FLAG_SCROLLABLE);
 }
 
+static void ui_event_CloseButton(lv_event_t * e)
+{
+//    lv_event_code_t event = lv_event_get_code(e);
+//    lv_obj_t * ta = lv_event_get_target(e);
+    if (e->code == LV_EVENT_CLICKED) {
+       lv_disp_load_scr(ui_ScreenBoards);
+    }
+    //
+}
+
+//--- to move to volume file:
+void ScreenVolume_screen_init(void)
+{
+    // ScreenVolume
+
+    ScreenVolume = lv_obj_create(NULL);
+
+    lv_obj_clear_flag(ScreenVolume, LV_OBJ_FLAG_SCROLLABLE);
+
+//    lv_obj_set_style_bg_color(ScreenVolume, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+//    lv_obj_set_style_bg_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_bg_color(ScreenVolume, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ScreenVolume, &ui_img_guitar_background_01_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_color(ScreenVolume, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_outline_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_color(ScreenVolume, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_blend_mode(ScreenVolume, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+
+    // VolumeLabel
+
+    VolumeLabel = lv_label_create(ScreenVolume);
+
+    lv_obj_set_width(VolumeLabel, LV_SIZE_CONTENT);
+    lv_obj_set_height(VolumeLabel, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(VolumeLabel, -166);
+    lv_obj_set_y(VolumeLabel, -97);
+
+    lv_obj_set_align(VolumeLabel, LV_ALIGN_CENTER);
+        lv_obj_set_style_text_color(VolumeLabel, lv_color_hex(0xFAFBFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(VolumeLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_label_set_text(VolumeLabel, "Plug-in: Volume\nVersion: 0.0.1\nBy: Varanda Labs");
+
+    // VolumeSlider
+
+    VolumeSlider = lv_slider_create(ScreenVolume);
+    lv_slider_set_range(VolumeSlider, 0, 100);
+
+    lv_obj_set_width(VolumeSlider, 397);
+    lv_obj_set_height(VolumeSlider, 10);
+
+    lv_obj_set_x(VolumeSlider, 0);
+    lv_obj_set_y(VolumeSlider, 0);
+
+    lv_obj_set_align(VolumeSlider, LV_ALIGN_CENTER);
+
+    // CloseButton
+    VolumeCloseButton = lv_btn_create(ScreenVolume);
+
+    lv_obj_set_width(VolumeCloseButton, 100);
+    lv_obj_set_height(VolumeCloseButton, 50);
+
+    lv_obj_set_x(VolumeCloseButton, 167);
+    lv_obj_set_y(VolumeCloseButton, 89);
+
+    lv_obj_set_align(VolumeCloseButton, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(VolumeCloseButton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_clear_flag(VolumeCloseButton, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_add_event_cb(VolumeCloseButton, ui_event_CloseButton, LV_EVENT_ALL, NULL);
+    lv_obj_t * label = lv_label_create(VolumeCloseButton);
+    lv_label_set_text(label, "Return");
+    lv_obj_set_align(label, LV_ALIGN_CENTER);
+}
+
 void ui_init(void)
 {
     lv_disp_t * dispp = lv_disp_get_default();
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
+//    lv_disp_set_bg_image(dispp, &ui_img_guitar_background_01_png);
+//    lv_disp_set_bg_opa(dispp, 255);
     ui_ScreenBoards_screen_init();
+    ScreenVolume_screen_init();
+
     lv_disp_load_scr(ui_ScreenBoards);
 }
+
 
