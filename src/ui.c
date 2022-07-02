@@ -138,6 +138,38 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
         break;
     }
 }
+
+static void OnRightBottomPanelContainerScrollBegin(lv_event_t * event)
+{
+    static int start_y = -1;
+    lv_point_t point;
+    int e = lv_event_get_code(event);
+
+    switch(e)
+    {
+    case LV_EVENT_PRESSED:             /**< The object has been pressed*/
+        lv_indev_get_vect(global_indev, &point);
+        LOG("OnRightBottomPanelContainerScrollBegin Pressed %d", point.y);
+        //start_y = 0;
+        break;
+    case LV_EVENT_PRESSING:
+        lv_indev_get_vect(global_indev, &point);
+        start_y += point.y;
+        LOG("OnRightBottomPanelContainerScrollBegin Position %d", start_y);
+        lv_obj_scroll_to_y(ui_BoardContainer, start_y, LV_ANIM_OFF);
+
+        break;
+    case LV_EVENT_RELEASED:
+        LOG("OnRightBottomPanelContainerScrollBegin Released");
+        //start_y = -1;
+        lv_obj_update_snap(ui_BoardContainer, LV_ANIM_ON);
+        break;
+
+    default:
+        break;
+    }
+}
+
 ///////////////////// SCREENS ////////////////////
 void ui_ScreenBoards_screen_init(void)
 {
@@ -207,7 +239,6 @@ void ui_ScreenBoards_screen_init(void)
     lv_obj_set_style_border_color(ui_RightTopPanelContainer, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_RightTopPanelContainer, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    //lv_obj_add_event_cb(ui_RightTopPanelContainer, OnRightTopPanelContainerScrollBegin, LV_EVENT_SCROLL_BEGIN, NULL);   /*Assign an event callback*/
     lv_obj_add_event_cb(ui_RightTopPanelContainer, OnRightTopPanelContainerScrollBegin, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
 
 
@@ -294,6 +325,7 @@ void ui_ScreenBoards_screen_init(void)
     lv_obj_set_x(ui_BoardContainer, 6);
     lv_obj_set_y(ui_BoardContainer, 167);
 
+    lv_obj_clear_flag(ui_BoardContainer, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_scrollbar_mode(ui_BoardContainer, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_dir(ui_BoardContainer, LV_DIR_VER);
 
@@ -682,6 +714,8 @@ void ui_ScreenBoards_screen_init(void)
     lv_obj_set_style_bg_opa(ui_RightBottomPanelContainer, 64, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_RightBottomPanelContainer, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_RightBottomPanelContainer, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_add_event_cb(ui_RightBottomPanelContainer, OnRightBottomPanelContainerScrollBegin, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
 
     // ui_BtBoardUp
 
