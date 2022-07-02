@@ -22,7 +22,21 @@
 
 #include "pedal.h"
 
+#define USE_DISPLAY_BACKGROUND
+#define DEFAULT_BG_R_COLOR     0x12
+#define DEFAULT_BG_G_COLOR     0x45
+#define DEFAULT_BG_B_COLOR     0x55
+
+#define DEFAULT_FG_R_COLOR     0x47
+#define DEFAULT_FG_G_COLOR     0xdf
+#define DEFAULT_FG_B_COLOR     0xff
+
+
 ///////////////////// VARIABLES ////////////////////
+/// \brief ui_ScreenBoards
+lv_color_t g_default_bg_color;  // global background color
+lv_color_t g_default_fg_color;  // global foreground color
+
 lv_obj_t * ui_ScreenBoards;
 lv_obj_t * ui_labelPadels;
 lv_obj_t * ui_LabelBoard;
@@ -106,11 +120,11 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
         lv_indev_get_vect(global_indev, &point);
         start_y += point.y;
         LOG("OnRightTopPanelContainerScrollBegin Position %d", start_y);
-        if (start_y > 5) {
+        if (start_y > 20) {
             start_y = 0;
             load_screen_up(ScreenVolume);
         }
-        if (start_y < -5) {
+        if (start_y < -20) {
             start_y = 0;
             load_screen_up(ScreenVolume);
         }
@@ -133,7 +147,11 @@ void ui_ScreenBoards_screen_init(void)
     ui_ScreenBoards = lv_obj_create(NULL);
 
     lv_obj_clear_flag(ui_ScreenBoards, LV_OBJ_FLAG_SCROLLABLE);
+#ifdef USE_DISPLAY_BACKGROUND
+    lv_obj_set_style_bg_color(ui_ScreenBoards, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ScreenBoards, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+#else
     lv_obj_set_style_bg_color(ui_ScreenBoards, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_ScreenBoards, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ui_ScreenBoards, &ui_img_guitar_background_01_png, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -142,7 +160,7 @@ void ui_ScreenBoards_screen_init(void)
     lv_obj_set_style_shadow_color(ui_ScreenBoards, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_opa(ui_ScreenBoards, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_blend_mode(ui_ScreenBoards, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
-
+#endif
     // ui_labelPadels
 
     ui_labelPadels = lv_img_create(ui_ScreenBoards);
@@ -885,11 +903,12 @@ void ScreenVolume_screen_init(void)
 
     ScreenVolume = lv_obj_create(NULL);
 
+
     lv_obj_clear_flag(ScreenVolume, LV_OBJ_FLAG_SCROLLABLE);
-
-//    lv_obj_set_style_bg_color(ScreenVolume, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-//    lv_obj_set_style_bg_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-
+ #ifdef USE_DISPLAY_BACKGROUND
+    lv_obj_set_style_bg_color(ScreenVolume, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+#else
     lv_obj_set_style_bg_color(ScreenVolume, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ScreenVolume, &ui_img_guitar_background_01_png, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -898,7 +917,7 @@ void ScreenVolume_screen_init(void)
     lv_obj_set_style_shadow_color(ScreenVolume, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_blend_mode(ScreenVolume, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
-
+#endif
 
     // VolumeLabel
 
@@ -911,7 +930,8 @@ void ScreenVolume_screen_init(void)
     lv_obj_set_y(VolumeLabel, -97);
 
     lv_obj_set_align(VolumeLabel, LV_ALIGN_CENTER);
-        lv_obj_set_style_text_color(VolumeLabel, lv_color_hex(0xFAFBFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(VolumeLabel, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     lv_obj_set_style_text_opa(VolumeLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_label_set_text(VolumeLabel, "Plug-in: Volume\nVersion: 0.0.1\nBy: Varanda Labs");
@@ -931,6 +951,9 @@ void ScreenVolume_screen_init(void)
 
     // CloseButton
     VolumeCloseButton = lv_btn_create(ScreenVolume);
+    static lv_style_t style_btn;
+    lv_style_set_bg_color(&style_btn, g_default_bg_color);
+    lv_obj_add_style(VolumeCloseButton, &style_btn, 0);
 
     lv_obj_set_width(VolumeCloseButton, 100);
     lv_obj_set_height(VolumeCloseButton, 50);
@@ -945,6 +968,8 @@ void ScreenVolume_screen_init(void)
 
     lv_obj_add_event_cb(VolumeCloseButton, ui_event_CloseButton, LV_EVENT_ALL, NULL);
     lv_obj_t * label = lv_label_create(VolumeCloseButton);
+    lv_obj_set_style_text_color(label, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     lv_label_set_text(label, "Return");
     lv_obj_set_align(label, LV_ALIGN_CENTER);
 }
@@ -961,17 +986,21 @@ void load_screen_down(lv_obj_t * screen)
 
 void ui_init(void)
 {
+    g_default_bg_color = lv_color_make(DEFAULT_BG_R_COLOR, DEFAULT_BG_G_COLOR, DEFAULT_BG_B_COLOR);
+    g_default_fg_color = lv_color_make(DEFAULT_FG_R_COLOR, DEFAULT_FG_G_COLOR, DEFAULT_FG_B_COLOR);
+
     lv_disp_t * dispp = lv_disp_get_default();
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
-//    lv_disp_set_bg_image(dispp, &ui_img_guitar_background_01_png);
-//    lv_disp_set_bg_opa(dispp, 255);
+ #ifdef USE_DISPLAY_BACKGROUND
+    lv_disp_set_bg_image(dispp, &ui_img_guitar_background_01_png);
+    lv_disp_set_bg_opa(dispp, 255);
+#endif
     ui_ScreenBoards_screen_init();
     ScreenVolume_screen_init();
 
     lv_disp_load_scr(ui_ScreenBoards);
-    //load_screen_down(ui_ScreenBoards);
 }
 
 
