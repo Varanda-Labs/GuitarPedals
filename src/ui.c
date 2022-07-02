@@ -33,7 +33,8 @@
 
 
 ///////////////////// VARIABLES ////////////////////
-/// \brief ui_ScreenBoards
+
+bool    lock_screen_swipe = false;
 lv_color_t g_default_bg_color;  // global background color
 lv_color_t g_default_fg_color;  // global foreground color
 
@@ -120,18 +121,22 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
         lv_indev_get_vect(global_indev, &point);
         start_y += point.y;
         LOG("OnRightTopPanelContainerScrollBegin Position %d", start_y);
-        if (start_y > 20) {
+        if (lock_screen_swipe) break;
+        if (start_y > 5) {
             start_y = 0;
             load_screen_up(ScreenVolume);
+            lock_screen_swipe = true;
         }
-        if (start_y < -20) {
+        if (start_y < -5) {
             start_y = 0;
             load_screen_up(ScreenVolume);
+            lock_screen_swipe = true;
         }
         break;
     case LV_EVENT_RELEASED:
         LOG("OnRightTopPanelContainerScrollBegin Released");
         start_y = -1;
+        lock_screen_swipe = false;
         break;
 
     default:
@@ -650,8 +655,8 @@ void ui_ScreenBoards_screen_init(void)
 
     // ui_BtScreenUp
 
-    ui_BtScreenUp = lv_btn_create(ui_ScreenBoards);
-
+//    ui_BtScreenUp = lv_btn_create(ui_ScreenBoards);
+    ui_BtScreenUp = lv_img_create(ui_ScreenBoards);
     lv_obj_set_width(ui_BtScreenUp, 44);
     lv_obj_set_height(ui_BtScreenUp, 50);
 
@@ -675,8 +680,8 @@ void ui_ScreenBoards_screen_init(void)
 
     // ui_BtScreenDown
 
-    ui_BtScreenDown = lv_btn_create(ui_ScreenBoards);
-
+//    ui_BtScreenDown = lv_btn_create(ui_ScreenBoards);
+    ui_BtScreenDown = lv_img_create(ui_ScreenBoards);
     lv_obj_set_width(ui_BtScreenDown, 44);
     lv_obj_set_height(ui_BtScreenDown, 50);
 
@@ -719,8 +724,8 @@ void ui_ScreenBoards_screen_init(void)
 
     // ui_BtBoardUp
 
-    ui_BtBoardUp = lv_btn_create(ui_ScreenBoards);
-
+//    ui_BtBoardUp = lv_btn_create(ui_ScreenBoards);
+    ui_BtBoardUp = lv_img_create(ui_ScreenBoards);
     lv_obj_set_width(ui_BtBoardUp, 44);
     lv_obj_set_height(ui_BtBoardUp, 50);
 
@@ -744,7 +749,8 @@ void ui_ScreenBoards_screen_init(void)
 
     // ui_BtBoardDown
 
-    ui_BtBoardDown = lv_btn_create(ui_ScreenBoards);
+//    ui_BtBoardDown = lv_btn_create(ui_ScreenBoards);
+    ui_BtBoardDown = lv_img_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_BtBoardDown, 44);
     lv_obj_set_height(ui_BtBoardDown, 50);
