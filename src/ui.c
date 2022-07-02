@@ -939,6 +939,9 @@ void ScreenVolume_screen_init(void)
     // VolumeSlider
 
     VolumeSlider = lv_slider_create(ScreenVolume);
+
+    static lv_style_t style_main;
+
     lv_slider_set_range(VolumeSlider, 0, 100);
 
     lv_obj_set_width(VolumeSlider, 397);
@@ -990,13 +993,15 @@ void ui_init(void)
     g_default_fg_color = lv_color_make(DEFAULT_FG_R_COLOR, DEFAULT_FG_G_COLOR, DEFAULT_FG_B_COLOR);
 
     lv_disp_t * dispp = lv_disp_get_default();
-    lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
-                                               false, LV_FONT_DEFAULT);
+    lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_CYAN), lv_palette_main(LV_PALETTE_RED),
+                                               false, LV_FONT_DEFAULT);    
     lv_disp_set_theme(dispp, theme);
  #ifdef USE_DISPLAY_BACKGROUND
     lv_disp_set_bg_image(dispp, &ui_img_guitar_background_01_png);
     lv_disp_set_bg_opa(dispp, 255);
 #endif
+
+
     ui_ScreenBoards_screen_init();
     ScreenVolume_screen_init();
 
