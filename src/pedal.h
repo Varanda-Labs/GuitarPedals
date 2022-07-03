@@ -28,8 +28,12 @@ extern "C" {
 #endif
 
 
-#define BOARD_MAX_NUM_PEDALS 6  // max num of pedals per board
-#define NUM_MAX_BOARDS 8
+#define BOARD_MAX_NUM_PEDALS        6  // max num of pedals per board
+#define NUM_MAX_BOARDS              8
+
+#define Y_OFFSET_BOARD_ROWS         92
+#define X_OFFSET_PEDAL              87
+#define X_OFFSET_FIRST_PEDAL        -18
 
 
 typedef uint32_t    audio_sample_t;
@@ -84,7 +88,9 @@ typedef struct pedal_st
 typedef struct pedal_board_st
 {
     int         num_pedals;
+    lv_obj_t * ui_BoardHContainer;
     pedal_t     pedals[BOARD_MAX_NUM_PEDALS];
+    int         selected_pedal_idx;
 } pedal_board_t;
 
 typedef struct boards_st

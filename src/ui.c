@@ -48,6 +48,9 @@ lv_obj_t * ui_RightArrowPedals;
 lv_obj_t * ui_RightArrowBoard;
 lv_obj_t * ui_BoardCounter;
 lv_obj_t * ui_BoardContainer;
+
+pedal_board_t boards[NUM_MAX_BOARDS];
+
 lv_obj_t * ui_BoardHContainer00;
 lv_obj_t * ui_BoardPedalIndex0000;
 lv_obj_t * ui_BoardPedalIndex0001;
@@ -147,7 +150,7 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
 #define Y_OFFSET_ACROSS_BOARDS 89
 static int board_idx = 0;
 
-const void * numbers[NUM_MAX_BOARDS] = {
+const void * numbers[10] = {
     &ui_img_number_0_png,
     &ui_img_number_1_png,
     &ui_img_number_2_png,
@@ -164,6 +167,7 @@ const void * numbers[NUM_MAX_BOARDS] = {
 static void update_board_counter(int pos)
 {
     int idx = (pos + Y_OFFSET_ACROSS_BOARDS/2) / Y_OFFSET_ACROSS_BOARDS;
+    if (idx >= NUM_MAX_BOARDS - 1) idx = NUM_MAX_BOARDS;
     LOG("idx = %d", idx);
     if (idx != board_idx) {
         lv_img_set_src(ui_BoardCounter, numbers[idx + 1]);
@@ -371,7 +375,46 @@ void ui_ScreenBoards_screen_init(void)
     lv_obj_set_scroll_snap_y(ui_BoardContainer, LV_SCROLL_SNAP_CENTER);
 
     // ui_BoardPedalIndex13
+#if 1
+    int i, p_idx;
+    for (i = 0; i < NUM_MAX_BOARDS; i++) {
+        pedal_board_t * board = &boards[i];
+        board->ui_BoardHContainer =  lv_obj_create(ui_BoardContainer);
+        lv_obj_set_width(board->ui_BoardHContainer, 345);
+        lv_obj_set_height(board->ui_BoardHContainer, 89);
 
+        lv_obj_set_x(board->ui_BoardHContainer, 18);
+        lv_obj_set_y(board->ui_BoardHContainer, i * Y_OFFSET_BOARD_ROWS);
+
+        lv_obj_set_align(board->ui_BoardHContainer, LV_ALIGN_LEFT_MID);
+
+        lv_obj_set_scrollbar_mode(board->ui_BoardHContainer, LV_SCROLLBAR_MODE_OFF);
+        lv_obj_set_scroll_dir(board->ui_BoardHContainer, LV_DIR_HOR);
+
+        lv_obj_set_style_bg_color(board->ui_BoardHContainer, lv_color_hex(0x47DFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_opa(board->ui_BoardHContainer, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_border_color(board->ui_BoardHContainer, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_border_opa(board->ui_BoardHContainer, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+        for (p_idx = 0; p_idx < NUM_MAX_BOARDS; p_idx++) {
+            pedal_t * pedal = &board->pedals[p_idx];
+
+            pedal->normal_img = lv_img_create(board->ui_BoardHContainer);
+            lv_img_set_src(pedal->normal_img, &ui_img_pedal_echo_png);
+
+            lv_obj_set_width(pedal->normal_img, LV_SIZE_CONTENT);
+            lv_obj_set_height(pedal->normal_img, LV_SIZE_CONTENT);
+
+            lv_obj_set_x(pedal->normal_img, (p_idx * X_OFFSET_PEDAL) + X_OFFSET_FIRST_PEDAL);
+            lv_obj_set_y(pedal->normal_img, 0);
+
+            lv_obj_set_align(pedal->normal_img, LV_ALIGN_LEFT_MID);
+
+            lv_obj_add_flag(pedal->normal_img, LV_OBJ_FLAG_ADV_HITTEST);
+            lv_obj_clear_flag(pedal->normal_img, LV_OBJ_FLAG_SCROLLABLE);
+        }
+    }
+#else
     // ui_BoardHContainer00
 
     ui_BoardHContainer00 = lv_obj_create(ui_BoardContainer);
@@ -664,7 +707,7 @@ void ui_ScreenBoards_screen_init(void)
 
     lv_obj_add_flag(ui_BoardPedalIndex18, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_BoardPedalIndex18, LV_OBJ_FLAG_SCROLLABLE);
-
+#endif
     // ui_ScreenIcon
 
     ui_ScreenIcon = lv_img_create(ui_ScreenBoards);
