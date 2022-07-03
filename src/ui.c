@@ -144,6 +144,32 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
     }
 }
 
+#define Y_OFFSET_ACROSS_BOARDS 89
+static int board_idx = 0;
+
+const void * numbers[NUM_MAX_BOARDS] = {
+    &ui_img_number_0_png,
+    &ui_img_number_1_png,
+    &ui_img_number_2_png,
+    &ui_img_number_3_png,
+    &ui_img_number_4_png,
+    &ui_img_number_5_png,
+    &ui_img_number_6_png,
+    &ui_img_number_7_png,
+    &ui_img_number_8_png,
+    &ui_img_number_9_png,
+
+};
+
+static void update_board_counter(int pos)
+{
+    int idx = (pos + Y_OFFSET_ACROSS_BOARDS/2) / Y_OFFSET_ACROSS_BOARDS;
+    LOG("idx = %d", idx);
+    if (idx != board_idx) {
+        lv_img_set_src(ui_BoardCounter, numbers[idx + 1]);
+        board_idx = idx;
+    }
+}
 static void OnRightBottomPanelContainerScrollBegin(lv_event_t * event)
 {
     static int start_y = -1;
@@ -155,19 +181,21 @@ static void OnRightBottomPanelContainerScrollBegin(lv_event_t * event)
     case LV_EVENT_PRESSED:             /**< The object has been pressed*/
         lv_indev_get_vect(global_indev, &point);
         LOG("OnRightBottomPanelContainerScrollBegin Pressed %d", point.y);
-        //start_y = 0;
         break;
     case LV_EVENT_PRESSING:
         lv_indev_get_vect(global_indev, &point);
-        start_y += point.y;
-        LOG("OnRightBottomPanelContainerScrollBegin Position %d", start_y);
+        start_y -= point.y;
+        int pos= lv_obj_get_scroll_top(ui_BoardContainer);
+        LOG("OnRightBottomPanelContainerScrollBegin Position %d, pos %d", start_y, pos);
         lv_obj_scroll_to_y(ui_BoardContainer, start_y, LV_ANIM_OFF);
+        update_board_counter(pos);
 
         break;
     case LV_EVENT_RELEASED:
-        LOG("OnRightBottomPanelContainerScrollBegin Released");
-        //start_y = -1;
         lv_obj_update_snap(ui_BoardContainer, LV_ANIM_ON);
+        start_y = lv_obj_get_scroll_top(ui_BoardContainer);
+        LOG("OnRightBottomPanelContainerScrollBegin Released, pos = %d", start_y);
+        update_board_counter(start_y);
         break;
 
     default:

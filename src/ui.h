@@ -77,7 +77,16 @@ LV_IMG_DECLARE(ui_img_padels_label_png);    // assets/padels_label.png
 LV_IMG_DECLARE(ui_img_board_label_png);    // assets/board_label.png
 LV_IMG_DECLARE(ui_img_left_arrow_png);    // assets/left_arrow.png
 LV_IMG_DECLARE(ui_img_right_arrow_png);    // assets/right_arrow.png
+LV_IMG_DECLARE(ui_img_number_0_png);    // assets/number_0.png
 LV_IMG_DECLARE(ui_img_number_1_png);    // assets/number_1.png
+LV_IMG_DECLARE(ui_img_number_2_png);    // assets/number_2.png
+LV_IMG_DECLARE(ui_img_number_3_png);    // assets/number_3.png
+LV_IMG_DECLARE(ui_img_number_4_png);    // assets/number_4.png
+LV_IMG_DECLARE(ui_img_number_5_png);    // assets/number_5.png
+LV_IMG_DECLARE(ui_img_number_6_png);    // assets/number_6.png
+LV_IMG_DECLARE(ui_img_number_7_png);    // assets/number_7.png
+LV_IMG_DECLARE(ui_img_number_8_png);    // assets/number_8.png
+LV_IMG_DECLARE(ui_img_number_9_png);    // assets/number_9.png
 LV_IMG_DECLARE(ui_img_pedal_echo_png);    // assets/Pedal_Echo.png
 LV_IMG_DECLARE(ui_img_pedal_dist_png);    // assets/Pedal_Dist.png
 LV_IMG_DECLARE(ui_img_pedal_volume_png);    // assets/Pedal_Volume.png
