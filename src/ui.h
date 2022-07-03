@@ -72,7 +72,7 @@ extern lv_obj_t * ui_BoardPedalIndex11;
 extern lv_obj_t * ui_BoardPedalIndex12;
 
 
-LV_IMG_DECLARE(ui_img_guitar_background_01_png);    // assets/guitar_background_01.png
+LV_IMG_DECLARE(ui_img_disp_background_png);    // assets/disp_background.png
 LV_IMG_DECLARE(ui_img_padels_label_png);    // assets/padels_label.png
 LV_IMG_DECLARE(ui_img_board_label_png);    // assets/board_label.png
 LV_IMG_DECLARE(ui_img_left_arrow_png);    // assets/left_arrow.png
