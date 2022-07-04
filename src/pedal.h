@@ -83,7 +83,7 @@ typedef struct pedal_st
 typedef struct pedal_board_st
 {
     int         num_pedals;
-    lv_obj_t * ui_BoardHContainer;
+    lv_obj_t *  ui_BoardHContainer;
     pedal_t     pedals[BOARD_MAX_NUM_PEDALS];
     int         selected_pedal_idx;
 } pedal_board_t;

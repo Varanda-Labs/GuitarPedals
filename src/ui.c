@@ -204,17 +204,14 @@ static void init_available_pedals(void)
     lv_obj_set_style_border_color(ui_AvailableHContainer, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_AvailableHContainer, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
-
     pedal_init_available_compressor(&available_pedals[0]);
-    pedal_init_available_compressor(&available_pedals[1]);
-    pedal_init_available_compressor(&available_pedals[2]);
-    pedal_init_available_compressor(&available_pedals[3]);
-    pedal_init_available_compressor(&available_pedals[4]);
+    pedal_init_available_distortion(&available_pedals[1]);
+    pedal_init_available_echo(&available_pedals[2]);
+    pedal_init_available_volume(&available_pedals[3]);
+    pedal_init_available_fuzz(&available_pedals[4]);
 
     for (i=0; i < NUM_AVAILABLE_PADALS; i++)
     {
-        // ui_AvPedalIndex0
         pedal_t * p = &available_pedals[i];
         p->widget = lv_img_create(ui_AvailableHContainer);
         lv_img_set_src(p->widget, p->normal_img);
@@ -639,8 +636,48 @@ void load_screen_down(lv_obj_t * screen)
     lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, 0);
 }
 
+bool add_pedal(pedal_type_t type, pedal_board_t * board)
+{
+    if (board->num_pedals >= BOARD_MAX_NUM_PEDALS) {
+        LOG_E("Board is full");
+        return false;
+    }
+
+    pedal_t* pedal = &board->pedals[board->num_pedals];
+
+    switch(type) {
+    case PEDAL_TYPE__COMPRESSOR:
+        pedal_init_available_compressor(pedal);
+        break;
+    case PEDAL_TYPE__VOLUME:
+        pedal_init_available_volume(pedal);
+        break;
+    case PEDAL_TYPE__DISTORTION:
+        pedal_init_available_distortion(pedal);
+        break;
+    case PEDAL_TYPE__ECHO:
+        pedal_init_available_echo(pedal);
+        break;
+    case PEDAL_TYPE__FUZZ:
+        pedal_init_available_fuzz(pedal);
+        break;
+    default:
+        LOG_E("unexpected type %d", type);
+        return false;
+    }
+    pedal->pedal_new_context_func_t(pedal);
+    lv_img_set_src(pedal->widget, pedal->normal_img);
+
+    board->num_pedals++;
+
+    return true;
+}
+
 void ui_init(void)
 {
+    memset(boards, 0, sizeof(boards));
+    memset(available_pedals, 0, sizeof(available_pedals));
+
     g_default_bg_color = lv_color_make(DEFAULT_BG_R_COLOR, DEFAULT_BG_G_COLOR, DEFAULT_BG_B_COLOR);
     g_default_fg_color = lv_color_make(DEFAULT_FG_R_COLOR, DEFAULT_FG_G_COLOR, DEFAULT_FG_B_COLOR);
 
@@ -656,6 +693,20 @@ void ui_init(void)
     ScreenVolume_screen_init();
 
     lv_disp_load_scr(ui_ScreenBoards);
+
+    // init pre-defined boards
+    add_pedal(PEDAL_TYPE__DISTORTION, &boards[0]);
+    add_pedal(PEDAL_TYPE__VOLUME, &boards[0]);
+
+    // init pre-defined boards
+    add_pedal(PEDAL_TYPE__DISTORTION, &boards[1]);
+    add_pedal(PEDAL_TYPE__FUZZ, &boards[1]);
+    add_pedal(PEDAL_TYPE__ECHO, &boards[1]);
+    add_pedal(PEDAL_TYPE__VOLUME, &boards[2]);
+
+    add_pedal(PEDAL_TYPE__DISTORTION, &boards[2]);
+    add_pedal(PEDAL_TYPE__ECHO, &boards[2]);
+    add_pedal(PEDAL_TYPE__VOLUME, &boards[2]);
 }
 
 
