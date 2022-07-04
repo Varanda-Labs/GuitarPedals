@@ -27,10 +27,11 @@ extern "C" {
 #include "lvgl/lvgl.h"
 #endif
 
+#include "pedal_compressor.h"
 
 #define BOARD_MAX_NUM_PEDALS        6  // max num of pedals per board
 #define NUM_MAX_BOARDS              8
-#define NUM_AVAILABLE_PADALS        6
+#define NUM_AVAILABLE_PADALS        5
 
 #define Y_OFFSET_BOARD_ROWS         92
 #define X_OFFSET_PEDAL              87
@@ -48,10 +49,15 @@ typedef enum {
     PEDAL_TYPE__ECHO,
 } pedal_type_t;
 
-typedef struct pedal_props_compressor_st // TODO: move all pedal_prop types to header files
+//typedef struct pedal_props_compressor_st // TODO: move all pedal_prop types to header files
+//{
+//    int     volume;
+//} pedal_props_compressor_t;
+
+typedef struct pedal_props_fuzz_st // TODO: move all pedal_prop types to header files
 {
-    int     volume;
-} pedal_props_compressor_t;
+    int     level;
+} pedal_props_fuzz_t;
 
 typedef struct pedal_props_volume_st
 {
@@ -77,13 +83,14 @@ typedef union {
     pedal_props_volume_t *        volume;
     pedal_props_distortion_t *    distortion;
     pedal_props_echo_t *          echo;
+    pedal_props_fuzz_t *          fuzz;
 } props_t;
 
 typedef struct pedal_st
 {
-    lv_img_dsc_t *          PropScreen;         // properties screen
-    void *                  normal_img;         // normal image
-    void *                  highlighted_img;    // pressed or selected image
+    const lv_img_dsc_t *    PropScreen;         // properties screen
+    const lv_img_dsc_t *    normal_img;         // normal image
+    const lv_img_dsc_t *    highlighted_img;    // pressed or selected image
     int                     pos_idx;            // position index (inside Board container)
     pedal_type_t            type;
 

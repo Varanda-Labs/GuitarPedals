@@ -18,9 +18,12 @@
 #ifndef PEDAL_COMPRESSOR_H
 #define PEDAL_COMPRESSOR_H
 
-#include "pedal.h"
+typedef struct pedal_props_compressor_st
+{
+    int     level;
+} pedal_props_compressor_t;
 
-void pedal_init_available_compressor(pedal_t * pedal);
+void pedal_init_available_compressor(void * pedal);
 
 
 #endif // PEDAL_COMPRESSOR_H

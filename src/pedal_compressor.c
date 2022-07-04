@@ -17,7 +17,8 @@
 
 #include "log.h"
 #include "ui.h"
-#include "pedal_compressor.h"
+#include "pedal.h"
+
 
 static void new_context(pedal_t * pedal)
 {
@@ -36,8 +37,9 @@ static audio_sample_t * process_audio(   audio_sample_t * input,
     return NULL;
 }
 
-void pedal_init_available_compressor(pedal_t * pedal)
+void pedal_init_available_compressor(void * _pedal)
 {
+    pedal_t * pedal = (pedal_t *) _pedal;
     pedal->PropScreen = &ui_img_pedal_compr_png;        // properties screen
     pedal->normal_img = NULL;         // normal image
     pedal->highlighted_img = NULL;    // pressed or selected image
