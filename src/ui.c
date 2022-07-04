@@ -410,7 +410,7 @@ void ui_ScreenBoards_screen_init(void)
         lv_obj_set_style_border_color(board->ui_BoardHContainer, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_border_opa(board->ui_BoardHContainer, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-        for (p_idx = 0; p_idx < NUM_MAX_BOARDS; p_idx++) {
+        for (p_idx = 0; p_idx < BOARD_MAX_NUM_PEDALS; p_idx++) {
             pedal_t * pedal = &board->pedals[p_idx];
 
             pedal->normal_img = &ui_img_pedal_empty_png;
