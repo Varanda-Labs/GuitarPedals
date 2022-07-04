@@ -88,11 +88,13 @@ typedef union {
 
 typedef struct pedal_st
 {
-    const lv_img_dsc_t *    PropScreen;         // properties screen
+    lv_obj_t *              widget;
     const lv_img_dsc_t *    normal_img;         // normal image
     const lv_img_dsc_t *    highlighted_img;    // pressed or selected image
     int                     pos_idx;            // position index (inside Board container)
     pedal_type_t            type;
+
+    lv_obj_t *              PropScreen;         // properties screen
 
     // firmware
     props_t                 props;              // properties
