@@ -28,6 +28,10 @@ extern "C" {
 #endif
 
 #include "pedal_compressor.h"
+#include "pedal_volume.h"
+#include "pedal_echo.h"
+#include "pedal_distortion.h"
+#include "pedal_fuzz.h"
 
 #define BOARD_MAX_NUM_PEDALS        6  // max num of pedals per board
 #define NUM_MAX_BOARDS              8
@@ -47,36 +51,8 @@ typedef enum {
     PEDAL_TYPE__VOLUME,
     PEDAL_TYPE__DISTORTION,
     PEDAL_TYPE__ECHO,
+    PEDAL_TYPE__FUZZ,
 } pedal_type_t;
-
-//typedef struct pedal_props_compressor_st // TODO: move all pedal_prop types to header files
-//{
-//    int     volume;
-//} pedal_props_compressor_t;
-
-typedef struct pedal_props_fuzz_st // TODO: move all pedal_prop types to header files
-{
-    int     level;
-} pedal_props_fuzz_t;
-
-typedef struct pedal_props_volume_st
-{
-    int     volume;
-} pedal_props_volume_t;
-
-typedef struct pedal_props_distortion_st
-{
-    int     gain;
-    int     clipping;
-} pedal_props_distortion_t;
-
-typedef struct pedal_props_echo_st
-{
-    int                     delay;          //  in milliseconds
-    float                   feedback_gain;
-    int                     num_samples;    //
-    audio_sample_t *        samples;        // 32 bits: 16 for left, 16 for right
-} pedal_props_echo_t;
 
 typedef union {
     pedal_props_compressor_t *    compressor;

@@ -20,11 +20,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct pedal_props_compressor_st
+typedef struct pedal_props_distortion_st
 {
-    int     level;
-} pedal_props_compressor_t;
+    int     gain;
+    int     clipping;
+} pedal_props_distortion_t;
 
-void pedal_init_available_compressor(void * pedal);
+void pedal_init_available_distortion(void * pedal);
 
 

@@ -20,11 +20,14 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct pedal_props_compressor_st
+typedef struct pedal_props_echo_st
 {
-    int     level;
-} pedal_props_compressor_t;
+    int                     delay;          //  in milliseconds
+    float                   feedback_gain;
+    int                     num_samples;    //
+    uint32_t *        samples;        // 32 bits: 16 for left, 16 for right
+} pedal_props_echo_t;
 
-void pedal_init_available_compressor(void * pedal);
+void pedal_init_available_echo(void * pedal);
 
 

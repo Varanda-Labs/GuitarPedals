@@ -20,11 +20,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct pedal_props_compressor_st
+typedef struct pedal_props_fuzz_st
 {
     int     level;
-} pedal_props_compressor_t;
+} pedal_props_fuzz_t;
 
-void pedal_init_available_compressor(void * pedal);
+void pedal_init_available_fuzz(void * pedal);
 
 

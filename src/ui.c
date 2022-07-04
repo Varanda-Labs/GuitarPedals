@@ -416,19 +416,20 @@ void ui_ScreenBoards_screen_init(void)
         for (p_idx = 0; p_idx < NUM_MAX_BOARDS; p_idx++) {
             pedal_t * pedal = &board->pedals[p_idx];
 
-            pedal->normal_img = lv_img_create(board->ui_BoardHContainer);
-            lv_img_set_src(pedal->normal_img, &ui_img_pedal_echo_png);
+            pedal->normal_img = &ui_img_pedal_empty_png;
+            pedal->widget = lv_img_create(board->ui_BoardHContainer);
+            lv_img_set_src(pedal->widget, pedal->normal_img);
 
-            lv_obj_set_width(pedal->normal_img, LV_SIZE_CONTENT);
-            lv_obj_set_height(pedal->normal_img, LV_SIZE_CONTENT);
+            lv_obj_set_width(pedal->widget, LV_SIZE_CONTENT);
+            lv_obj_set_height(pedal->widget, LV_SIZE_CONTENT);
 
-            lv_obj_set_x(pedal->normal_img, (p_idx * X_OFFSET_PEDAL) + X_OFFSET_FIRST_PEDAL);
-            lv_obj_set_y(pedal->normal_img, 0);
+            lv_obj_set_x(pedal->widget, (p_idx * X_OFFSET_PEDAL) + X_OFFSET_FIRST_PEDAL);
+            lv_obj_set_y(pedal->widget, 0);
 
-            lv_obj_set_align(pedal->normal_img, LV_ALIGN_LEFT_MID);
+            lv_obj_set_align(pedal->widget, LV_ALIGN_LEFT_MID);
 
-            lv_obj_add_flag(pedal->normal_img, LV_OBJ_FLAG_ADV_HITTEST);
-            lv_obj_clear_flag(pedal->normal_img, LV_OBJ_FLAG_SCROLLABLE);
+            lv_obj_add_flag(pedal->widget, LV_OBJ_FLAG_ADV_HITTEST);
+            lv_obj_clear_flag(pedal->widget, LV_OBJ_FLAG_SCROLLABLE);
         }
     }
 
