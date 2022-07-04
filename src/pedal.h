@@ -30,6 +30,7 @@ extern "C" {
 
 #define BOARD_MAX_NUM_PEDALS        6  // max num of pedals per board
 #define NUM_MAX_BOARDS              8
+#define NUM_AVAILABLE_PADALS        6
 
 #define Y_OFFSET_BOARD_ROWS         92
 #define X_OFFSET_PEDAL              87
@@ -40,48 +41,57 @@ typedef uint32_t    audio_sample_t;
 typedef audio_sample_t * (*process_audio_func_t) ( audio_sample_t * input,
                                                     int num_input_samples,
                                                     int * num_output_samples);
-
 typedef enum {
+    PEDAL_TYPE__COMPRESSOR,
     PEDAL_TYPE__VOLUME,
     PEDAL_TYPE__DISTORTION,
     PEDAL_TYPE__ECHO,
 } pedal_type_t;
 
-typedef struct pedal_volume_st
+typedef struct pedal_props_compressor_st // TODO: move all pedal_prop types to header files
 {
     int     volume;
-} pedal_volume_t;
+} pedal_props_compressor_t;
 
-typedef struct pedal_distortion_st
+typedef struct pedal_props_volume_st
+{
+    int     volume;
+} pedal_props_volume_t;
+
+typedef struct pedal_props_distortion_st
 {
     int     gain;
     int     clipping;
-} pedal_distortion_t;
+} pedal_props_distortion_t;
 
-typedef struct pedal_echo_st
+typedef struct pedal_props_echo_st
 {
     int                     delay;          //  in milliseconds
     float                   feedback_gain;
     int                     num_samples;    //
     audio_sample_t *        samples;        // 32 bits: 16 for left, 16 for right
-} pedal_echo_t;
+} pedal_props_echo_t;
 
 typedef union {
-    pedal_volume_t *        volume_ptr;
-    pedal_distortion_t *    distortion_ptr;
-    pedal_echo_t *          echo_ptr;
+    pedal_props_compressor_t *    compressor;
+    pedal_props_volume_t *        volume;
+    pedal_props_distortion_t *    distortion;
+    pedal_props_echo_t *          echo;
 } props_t;
 
 typedef struct pedal_st
 {
-    lv_obj_t *              PropScreen;         // properties screen
-    lv_obj_t *              normal_img;         // normal image
-    lv_obj_t *              highlighted_img;    // pressed or selected image
+    lv_img_dsc_t *          PropScreen;         // properties screen
+    void *                  normal_img;         // normal image
+    void *                  highlighted_img;    // pressed or selected image
     int                     pos_idx;            // position index (inside Board container)
     pedal_type_t            type;
 
     // firmware
     props_t                 props;              // properties
+    void                    (*pedal_new_context_func_t) (struct pedal_st * pedal);
+    void                    (*pedal_delete_context_func_t) (struct pedal_st * pedal);
+
     process_audio_func_t    process_audio;
 } pedal_t;
 
@@ -99,7 +109,8 @@ typedef struct boards_st
     pedal_board_t           boards[NUM_MAX_BOARDS];
 } boards_t;
 
-
+typedef void (*pedal_new_context_func_t) (pedal_t * pedal);
+typedef void (*pedal_delete_context_func_t) (pedal_t * pedal);
 
 #ifdef __cplusplus
 }
