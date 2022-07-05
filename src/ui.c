@@ -222,13 +222,13 @@ static void OnPedalEvent(lv_event_t * event)
 //        }
         break;
 
-    case LV_EVENT_LONG_PRESSED:
-        LOG("Long Pressed pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
-        if (pedal->props.compressor) {
-            active_pedal = pedal;
-            dialog_show();
-        }
-        break;
+//    case LV_EVENT_LONG_PRESSED:
+//        LOG("Long Pressed pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
+//        if (pedal->props.compressor) {
+//            active_pedal = pedal;
+//            dialog_show();
+//        }
+//        break;
 
     case LV_EVENT_PRESSED:
         h_scroll = lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer);
@@ -238,16 +238,13 @@ static void OnPedalEvent(lv_event_t * event)
         lv_obj_set_style_img_recolor(pedal->widget, lv_color_hex(PRESSED_COLOR), 0);
         break;
 
-//    case LV_EVENT_SCROLL:
-//        h_scroll = lv_obj_get_scroll_left(event->target);
-//        break;
-
     case LV_EVENT_RELEASED:
         h_scroll = h_scroll - lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer);
         if (h_scroll < 0) h_scroll = -h_scroll;
 
         if (h_scroll > 5) {
             LOG("ignore click as we had H scroll");
+            lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
             break;
         }
 
@@ -315,6 +312,7 @@ static void update_board_counter(int pos)
         board_idx = idx;
     }
 }
+
 static void OnRightBottomPanelContainerScrollBegin(lv_event_t * event)
 {
     static int start_y = -1;
@@ -326,21 +324,26 @@ static void OnRightBottomPanelContainerScrollBegin(lv_event_t * event)
     case LV_EVENT_PRESSED:             /**< The object has been pressed*/
         lv_indev_get_vect(global_indev, &point);
         LOG("OnRightBottomPanelContainerScrollBegin Pressed %d", point.y);
+        lv_obj_set_style_bg_color(ui_RightBottomPanelContainer, lv_color_hex(PRESSED_COLOR), LV_PART_MAIN | LV_STATE_PRESSED);
         break;
+
     case LV_EVENT_PRESSING:
         lv_indev_get_vect(global_indev, &point);
         start_y -= point.y;
         int pos= lv_obj_get_scroll_top(ui_BoardContainer);
-        LOG("OnRightBottomPanelContainerScrollBegin Position %d, pos %d", start_y, pos);
         lv_obj_scroll_to_y(ui_BoardContainer, start_y, LV_ANIM_OFF);
+        LOG("OnRightBottomPanelContainerScrollBegin Position %d, pos %d", start_y, pos);
         update_board_counter(pos);
-
         break;
+
     case LV_EVENT_RELEASED:
         lv_obj_update_snap(ui_BoardContainer, LV_ANIM_ON);
         start_y = lv_obj_get_scroll_top(ui_BoardContainer);
         LOG("OnRightBottomPanelContainerScrollBegin Released, pos = %d", start_y);
         update_board_counter(start_y);
+        lv_obj_set_style_img_recolor_opa(ui_BoardContainer, 0, 0);
+        lv_obj_set_style_bg_color(ui_RightBottomPanelContainer, lv_color_hex(RELEASED_COLOR), LV_PART_MAIN | LV_STATE_DEFAULT);
+
         break;
 
     default:
@@ -451,6 +454,10 @@ void ui_ScreenBoards_screen_init(void)
 
     lv_obj_set_style_bg_color(ui_RightTopPanelContainer, lv_color_hex(0x47DFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     //lv_obj_set_style_bg_opa(ui_RightTopPanelContainer, 64, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_bg_opa(ui_RightTopPanelContainer, 64, LV_PART_MAIN | LV_STATE_PRESSED);
+    lv_obj_set_style_bg_color(ui_RightTopPanelContainer, lv_color_hex(PRESSED_COLOR), LV_PART_MAIN | LV_STATE_PRESSED);
+
     lv_obj_set_style_bg_opa(ui_RightTopPanelContainer, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 //    lv_obj_set_style_border_color(ui_RightTopPanelContainer, lv_color_hex(0x003460), LV_PART_MAIN | LV_STATE_DEFAULT);
 //    lv_obj_set_style_border_opa(ui_RightTopPanelContainer, 70, LV_PART_MAIN | LV_STATE_DEFAULT);
