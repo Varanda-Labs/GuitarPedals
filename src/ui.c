@@ -48,6 +48,14 @@ lv_obj_t * ui_RightArrowPedals;
 lv_obj_t * ui_RightArrowBoard;
 lv_obj_t * ui_BoardCounter;
 lv_obj_t * ui_BoardContainer;
+lv_obj_t * ui_Screen1;
+lv_obj_t * ui_diaCheck;
+lv_obj_t * ui_DialogPanel;
+lv_obj_t * ui_diaProps;
+lv_obj_t * ui_diaMoveRight;
+lv_obj_t * ui_diaMoveLeft;
+lv_obj_t * ui_diaRemova;
+lv_obj_t * ui_diaEnable;
 
 pedal_board_t boards[NUM_MAX_BOARDS];
 pedal_t available_pedals[NUM_AVAILABLE_PADALS];
@@ -673,6 +681,123 @@ bool add_pedal(pedal_type_t type, pedal_board_t * board)
     return true;
 }
 
+void ui_Dialog_init(void)
+{
+    // ui_diaCheck
+
+    ui_diaCheck = lv_img_create(ui_ScreenBoards);
+    lv_img_set_src(ui_diaCheck, &ui_img_sel_check_png);
+
+    lv_obj_set_width(ui_diaCheck, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaCheck, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_diaCheck, 96);
+    lv_obj_set_y(ui_diaCheck, 98);
+
+    lv_obj_set_align(ui_diaCheck, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(ui_diaCheck, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaCheck, LV_OBJ_FLAG_SCROLLABLE);
+
+    // ui_DialogPanel
+
+    ui_DialogPanel = lv_obj_create(ui_ScreenBoards);
+
+    lv_obj_set_width(ui_DialogPanel, 192);
+    lv_obj_set_height(ui_DialogPanel, 255);
+
+    lv_obj_set_x(ui_DialogPanel, 0);
+    lv_obj_set_y(ui_DialogPanel, 0);
+
+    lv_obj_set_align(ui_DialogPanel, LV_ALIGN_CENTER);
+
+    lv_obj_clear_flag(ui_DialogPanel, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_set_style_bg_color(ui_DialogPanel, lv_color_hex(0x001622), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_DialogPanel, 230, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    // ui_diaProps
+
+    ui_diaProps = lv_img_create(ui_DialogPanel);
+    lv_img_set_src(ui_diaProps, &ui_img_sel_props_png);
+
+    lv_obj_set_width(ui_diaProps, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaProps, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_diaProps, -2);
+    lv_obj_set_y(ui_diaProps, -98);
+
+    lv_obj_set_align(ui_diaProps, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(ui_diaProps, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaProps, LV_OBJ_FLAG_SCROLLABLE);
+
+    // ui_diaMoveRight
+
+    ui_diaMoveRight = lv_img_create(ui_DialogPanel);
+    lv_img_set_src(ui_diaMoveRight, &ui_img_sel_move_right_png);
+
+    lv_obj_set_width(ui_diaMoveRight, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaMoveRight, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_diaMoveRight, 3);
+    lv_obj_set_y(ui_diaMoveRight, -49);
+
+    lv_obj_set_align(ui_diaMoveRight, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(ui_diaMoveRight, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaMoveRight, LV_OBJ_FLAG_SCROLLABLE);
+
+    // ui_diaMoveLeft
+
+    ui_diaMoveLeft = lv_img_create(ui_DialogPanel);
+    lv_img_set_src(ui_diaMoveLeft, &ui_img_sel_move_left_png);
+
+    lv_obj_set_width(ui_diaMoveLeft, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaMoveLeft, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_diaMoveLeft, -2);
+    lv_obj_set_y(ui_diaMoveLeft, 0);
+
+    lv_obj_set_align(ui_diaMoveLeft, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(ui_diaMoveLeft, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaMoveLeft, LV_OBJ_FLAG_SCROLLABLE);
+
+    // ui_diaRemova
+
+    ui_diaRemova = lv_img_create(ui_DialogPanel);
+    lv_img_set_src(ui_diaRemova, &ui_img_sel_remove_png);
+
+    lv_obj_set_width(ui_diaRemova, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaRemova, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_diaRemova, -5);
+    lv_obj_set_y(ui_diaRemova, 49);
+
+    lv_obj_set_align(ui_diaRemova, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(ui_diaRemova, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaRemova, LV_OBJ_FLAG_SCROLLABLE);
+
+    // ui_diaEnable
+
+    ui_diaEnable = lv_img_create(ui_DialogPanel);
+    lv_img_set_src(ui_diaEnable, &ui_img_sel_enable_png);
+
+    lv_obj_set_width(ui_diaEnable, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaEnable, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_diaEnable, -6);
+    lv_obj_set_y(ui_diaEnable, 98);
+
+    lv_obj_set_align(ui_diaEnable, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(ui_diaEnable, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaEnable, LV_OBJ_FLAG_SCROLLABLE);
+
+}
+
 void ui_init(void)
 {
     memset(boards, 0, sizeof(boards));
@@ -707,6 +832,9 @@ void ui_init(void)
     add_pedal(PEDAL_TYPE__DISTORTION, &boards[2]);
     add_pedal(PEDAL_TYPE__ECHO, &boards[2]);
     add_pedal(PEDAL_TYPE__VOLUME, &boards[2]);
+
+    // just test
+    ui_Dialog_init();
 }
 
 
