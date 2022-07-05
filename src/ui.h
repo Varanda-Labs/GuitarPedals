@@ -48,7 +48,7 @@ extern lv_obj_t * ui_DialogPanel;
 extern lv_obj_t * ui_diaProps;
 extern lv_obj_t * ui_diaMoveRight;
 extern lv_obj_t * ui_diaMoveLeft;
-extern lv_obj_t * ui_diaRemova;
+extern lv_obj_t * ui_diaRemove;
 extern lv_obj_t * ui_diaEnable;
 extern lv_obj_t * ui_diaClose;
 extern lv_obj_t * ui_diaCheck;

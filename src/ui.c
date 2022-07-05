@@ -54,7 +54,7 @@ lv_obj_t * ui_DialogPanel;
 lv_obj_t * ui_diaProps;
 lv_obj_t * ui_diaMoveRight;
 lv_obj_t * ui_diaMoveLeft;
-lv_obj_t * ui_diaRemova;
+lv_obj_t * ui_diaRemove;
 lv_obj_t * ui_diaEnable;
 lv_obj_t * ui_diaClose;
 
@@ -103,19 +103,99 @@ static void dialog_hide()
     lv_obj_add_flag(ui_DialogPanel, LV_OBJ_FLAG_HIDDEN);
 }
 
+#define PRESSED_COLOR 0x72C250 //0xC9DFFF // 0x47DFFF
+#define RELEASED_COLOR 0x47DFFF
+
+static void OnDiaProps(lv_event_t * event)
+{
+
+    switch(event->code) {
+    case LV_EVENT_CLICKED:
+        LOG("OnDiaProps: Clicked");
+        break;
+
+    case LV_EVENT_PRESSED:
+        lv_obj_set_style_img_recolor_opa(event->target, 255, 0);
+        lv_obj_set_style_img_recolor(event->target, lv_color_hex(PRESSED_COLOR), 0);
+        break;
+
+    case LV_EVENT_RELEASED:
+        lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
+        lv_obj_set_style_img_recolor(event->target, lv_color_hex(PRESSED_COLOR), 0);
+        LOG("OnDiaProps: Released");
+        break;
+
+    default: break;
+    }
+}
+
+static void OnDiaMoveRight(lv_event_t * event)
+{
+    LOG("OnDiaMoveRight");
+}
+
+static void OnDiaMoveLeft(lv_event_t * event)
+{
+    LOG("OnDiaMoveLeft");
+}
+
+static void OnDiaRemove(lv_event_t * event)
+{
+    LOG("OnDiaRemove");
+}
+
+static void OnDiaEnable(lv_event_t * event)
+{
+    LOG("OnDiaEnable");
+}
+
+static void OnDiaClose(lv_event_t * event)
+{
+    LOG("OnDiaClose");
+}
 
 static void OnPedalLongClicked(lv_event_t * event)
 {
     LOG("Long Clicked %d", (int) event->user_data);
 }
 
-static void OnPedalClicked(lv_event_t * event)
+static void OnPedalEvent(lv_event_t * event)
 {
     pedal_t * pedal =  (pedal_t *) event->user_data;
-    LOG("Clicked pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
-    if (pedal->props.compressor) {
-        active_pedal = pedal;
-        dialog_show();
+
+    switch(event->code) {
+    case LV_EVENT_CLICKED:
+        LOG("Clicked pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
+
+//        if (pedal->props.compressor) {
+//            active_pedal = pedal;
+//            dialog_show();
+//        }
+        break;
+
+    case LV_EVENT_LONG_PRESSED:
+        LOG("Long Pressed pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
+        if (pedal->props.compressor) {
+            active_pedal = pedal;
+            dialog_show();
+        }
+        break;
+
+    case LV_EVENT_PRESSED:
+        //lv_obj_set_style_img_recolor_opa(img1, intense, 0);
+        //lv_obj_set_style_img_recolor(img1, color, 0);
+        lv_obj_set_style_img_recolor(pedal->widget, lv_color_hex(PRESSED_COLOR), 0);
+        break;
+
+    case LV_EVENT_RELEASED:
+        LOG("Pressed pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
+        if (pedal->props.compressor) {
+            active_pedal = pedal;
+            dialog_show();
+        }
+        break;
+
+    default: break;
     }
 }
 
@@ -467,7 +547,7 @@ void ui_ScreenBoards_screen_init(void)
 
             //lv_obj_set_click(pedal->widget, true);
             lv_obj_add_flag(pedal->widget, LV_OBJ_FLAG_CLICKABLE);
-            lv_obj_add_event_cb(pedal->widget, OnPedalClicked, LV_EVENT_CLICKED, pedal);   /*Assign an event callback*/
+            lv_obj_add_event_cb(pedal->widget, OnPedalEvent, LV_EVENT_ALL, pedal);   /*Assign an event callback*/
             //lv_obj_add_event_cb(pedal->widget, OnPedalLongClicked, LV_EVENT_LONG_PRESSED, (void *) p_idx);   /*Assign an event callback*/
 
 
@@ -756,6 +836,9 @@ void ui_Dialog_init(void)
 
     lv_obj_add_flag(ui_diaProps, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_diaProps, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_diaProps, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(ui_diaProps, OnDiaProps, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
+
 
     // ui_diaMoveRight
 
@@ -772,6 +855,9 @@ void ui_Dialog_init(void)
 
     lv_obj_add_flag(ui_diaMoveRight, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_diaMoveRight, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_diaMoveRight, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_add_event_cb(ui_diaMoveRight, OnDiaMoveRight, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
 
     // ui_diaMoveLeft
 
@@ -788,22 +874,28 @@ void ui_Dialog_init(void)
 
     lv_obj_add_flag(ui_diaMoveLeft, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_diaMoveLeft, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_diaMoveLeft, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(ui_diaMoveLeft, OnDiaMoveLeft, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
 
-    // ui_diaRemova
+    // ui_diaRemove
 
-    ui_diaRemova = lv_img_create(ui_DialogPanel);
-    lv_img_set_src(ui_diaRemova, &ui_img_sel_remove_png);
+    ui_diaRemove = lv_img_create(ui_DialogPanel);
+    lv_img_set_src(ui_diaRemove, &ui_img_sel_remove_png);
 
-    lv_obj_set_width(ui_diaRemova, LV_SIZE_CONTENT);
-    lv_obj_set_height(ui_diaRemova, LV_SIZE_CONTENT);
+    lv_obj_set_width(ui_diaRemove, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaRemove, LV_SIZE_CONTENT);
 
-    lv_obj_set_x(ui_diaRemova, -3);
-    lv_obj_set_y(ui_diaRemova, 22);
+    lv_obj_set_x(ui_diaRemove, -3);
+    lv_obj_set_y(ui_diaRemove, 22);
 
-    lv_obj_set_align(ui_diaRemova, LV_ALIGN_CENTER);
+    lv_obj_set_align(ui_diaRemove, LV_ALIGN_CENTER);
 
-    lv_obj_add_flag(ui_diaRemova, LV_OBJ_FLAG_ADV_HITTEST);
-    lv_obj_clear_flag(ui_diaRemova, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_diaRemove, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaRemove, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_diaRemove, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_add_event_cb(ui_diaRemove, OnDiaRemove, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
+
 
     // ui_diaEnable
 
@@ -820,6 +912,10 @@ void ui_Dialog_init(void)
 
     lv_obj_add_flag(ui_diaEnable, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_diaEnable, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_diaEnable, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_add_event_cb(ui_diaEnable, OnDiaEnable, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
+
 
     // ui_diaClose
 
@@ -836,6 +932,9 @@ void ui_Dialog_init(void)
 
     lv_obj_add_flag(ui_diaClose, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_diaClose, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(ui_diaClose, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_add_event_cb(ui_diaClose, OnDiaClose, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
 
     // ui_diaCheck
 
@@ -930,21 +1029,21 @@ void ui_Dialog_init(void)
 //    lv_obj_add_flag(ui_diaMoveLeft, LV_OBJ_FLAG_ADV_HITTEST);
 //    lv_obj_clear_flag(ui_diaMoveLeft, LV_OBJ_FLAG_SCROLLABLE);
 
-//    // ui_diaRemova
+//    // ui_diaRemove
 
-//    ui_diaRemova = lv_img_create(ui_DialogPanel);
-//    lv_img_set_src(ui_diaRemova, &ui_img_sel_remove_png);
+//    ui_diaRemove = lv_img_create(ui_DialogPanel);
+//    lv_img_set_src(ui_diaRemove, &ui_img_sel_remove_png);
 
-//    lv_obj_set_width(ui_diaRemova, LV_SIZE_CONTENT);
-//    lv_obj_set_height(ui_diaRemova, LV_SIZE_CONTENT);
+//    lv_obj_set_width(ui_diaRemove, LV_SIZE_CONTENT);
+//    lv_obj_set_height(ui_diaRemove, LV_SIZE_CONTENT);
 
-//    lv_obj_set_x(ui_diaRemova, -5);
-//    lv_obj_set_y(ui_diaRemova, 49);
+//    lv_obj_set_x(ui_diaRemove, -5);
+//    lv_obj_set_y(ui_diaRemove, 49);
 
-//    lv_obj_set_align(ui_diaRemova, LV_ALIGN_CENTER);
+//    lv_obj_set_align(ui_diaRemove, LV_ALIGN_CENTER);
 
-//    lv_obj_add_flag(ui_diaRemova, LV_OBJ_FLAG_ADV_HITTEST);
-//    lv_obj_clear_flag(ui_diaRemova, LV_OBJ_FLAG_SCROLLABLE);
+//    lv_obj_add_flag(ui_diaRemove, LV_OBJ_FLAG_ADV_HITTEST);
+//    lv_obj_clear_flag(ui_diaRemove, LV_OBJ_FLAG_SCROLLABLE);
 
 //    // ui_diaEnable
 
