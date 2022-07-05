@@ -56,6 +56,7 @@ lv_obj_t * ui_diaMoveRight;
 lv_obj_t * ui_diaMoveLeft;
 lv_obj_t * ui_diaRemova;
 lv_obj_t * ui_diaEnable;
+lv_obj_t * ui_diaClose;
 
 pedal_board_t boards[NUM_MAX_BOARDS];
 pedal_t available_pedals[NUM_AVAILABLE_PADALS];
@@ -721,26 +722,14 @@ void ui_Dialog_init(void)
 {
     // ui_diaCheck
 
-    ui_diaCheck = lv_img_create(ui_ScreenBoards);
-    lv_img_set_src(ui_diaCheck, &ui_img_sel_check_png);
 
-    lv_obj_set_width(ui_diaCheck, LV_SIZE_CONTENT);
-    lv_obj_set_height(ui_diaCheck, LV_SIZE_CONTENT);
-
-    lv_obj_set_x(ui_diaCheck, 96);
-    lv_obj_set_y(ui_diaCheck, 98);
-
-    lv_obj_set_align(ui_diaCheck, LV_ALIGN_CENTER);
-
-    lv_obj_add_flag(ui_diaCheck, LV_OBJ_FLAG_ADV_HITTEST);
-    lv_obj_clear_flag(ui_diaCheck, LV_OBJ_FLAG_SCROLLABLE);
 
     // ui_DialogPanel
 
     ui_DialogPanel = lv_obj_create(ui_ScreenBoards);
 
     lv_obj_set_width(ui_DialogPanel, 192);
-    lv_obj_set_height(ui_DialogPanel, 255);
+    lv_obj_set_height(ui_DialogPanel, 269);
 
     lv_obj_set_x(ui_DialogPanel, 0);
     lv_obj_set_y(ui_DialogPanel, 0);
@@ -750,7 +739,7 @@ void ui_Dialog_init(void)
     lv_obj_clear_flag(ui_DialogPanel, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_set_style_bg_color(ui_DialogPanel, lv_color_hex(0x001622), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_DialogPanel, 230, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_DialogPanel, 240, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     // ui_diaProps
 
@@ -761,7 +750,7 @@ void ui_Dialog_init(void)
     lv_obj_set_height(ui_diaProps, LV_SIZE_CONTENT);
 
     lv_obj_set_x(ui_diaProps, -2);
-    lv_obj_set_y(ui_diaProps, -98);
+    lv_obj_set_y(ui_diaProps, -113);
 
     lv_obj_set_align(ui_diaProps, LV_ALIGN_CENTER);
 
@@ -776,8 +765,8 @@ void ui_Dialog_init(void)
     lv_obj_set_width(ui_diaMoveRight, LV_SIZE_CONTENT);
     lv_obj_set_height(ui_diaMoveRight, LV_SIZE_CONTENT);
 
-    lv_obj_set_x(ui_diaMoveRight, 3);
-    lv_obj_set_y(ui_diaMoveRight, -49);
+    lv_obj_set_x(ui_diaMoveRight, 6);
+    lv_obj_set_y(ui_diaMoveRight, -68);
 
     lv_obj_set_align(ui_diaMoveRight, LV_ALIGN_CENTER);
 
@@ -793,7 +782,7 @@ void ui_Dialog_init(void)
     lv_obj_set_height(ui_diaMoveLeft, LV_SIZE_CONTENT);
 
     lv_obj_set_x(ui_diaMoveLeft, -2);
-    lv_obj_set_y(ui_diaMoveLeft, 0);
+    lv_obj_set_y(ui_diaMoveLeft, -21);
 
     lv_obj_set_align(ui_diaMoveLeft, LV_ALIGN_CENTER);
 
@@ -808,8 +797,8 @@ void ui_Dialog_init(void)
     lv_obj_set_width(ui_diaRemova, LV_SIZE_CONTENT);
     lv_obj_set_height(ui_diaRemova, LV_SIZE_CONTENT);
 
-    lv_obj_set_x(ui_diaRemova, -5);
-    lv_obj_set_y(ui_diaRemova, 49);
+    lv_obj_set_x(ui_diaRemova, -3);
+    lv_obj_set_y(ui_diaRemova, 22);
 
     lv_obj_set_align(ui_diaRemova, LV_ALIGN_CENTER);
 
@@ -824,13 +813,154 @@ void ui_Dialog_init(void)
     lv_obj_set_width(ui_diaEnable, LV_SIZE_CONTENT);
     lv_obj_set_height(ui_diaEnable, LV_SIZE_CONTENT);
 
-    lv_obj_set_x(ui_diaEnable, -6);
-    lv_obj_set_y(ui_diaEnable, 98);
+    lv_obj_set_x(ui_diaEnable, -7);
+    lv_obj_set_y(ui_diaEnable, 68);
 
     lv_obj_set_align(ui_diaEnable, LV_ALIGN_CENTER);
 
     lv_obj_add_flag(ui_diaEnable, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_diaEnable, LV_OBJ_FLAG_SCROLLABLE);
+
+    // ui_diaClose
+
+    ui_diaClose = lv_img_create(ui_DialogPanel);
+    lv_img_set_src(ui_diaClose, &ui_img_sel_close_png);
+
+    lv_obj_set_width(ui_diaClose, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaClose, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_diaClose, -5);
+    lv_obj_set_y(ui_diaClose, 112);
+
+    lv_obj_set_align(ui_diaClose, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(ui_diaClose, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaClose, LV_OBJ_FLAG_SCROLLABLE);
+
+    // ui_diaCheck
+
+    ui_diaCheck = lv_img_create(ui_DialogPanel);
+    lv_img_set_src(ui_diaCheck, &ui_img_sel_check_png);
+
+    lv_obj_set_width(ui_diaCheck, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_diaCheck, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_diaCheck, -45);
+    lv_obj_set_y(ui_diaCheck, 69);
+
+    lv_obj_set_align(ui_diaCheck, LV_ALIGN_CENTER);
+
+    lv_obj_add_flag(ui_diaCheck, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_diaCheck, LV_OBJ_FLAG_SCROLLABLE);
+////------
+
+//    lv_obj_set_width(ui_diaCheck, LV_SIZE_CONTENT);
+//    lv_obj_set_height(ui_diaCheck, LV_SIZE_CONTENT);
+
+//    lv_obj_set_x(ui_diaCheck, 96);
+//    lv_obj_set_y(ui_diaCheck, 98);
+
+//    lv_obj_set_align(ui_diaCheck, LV_ALIGN_CENTER);
+
+//    lv_obj_add_flag(ui_diaCheck, LV_OBJ_FLAG_ADV_HITTEST);
+//    lv_obj_clear_flag(ui_diaCheck, LV_OBJ_FLAG_SCROLLABLE);
+
+//    // ui_DialogPanel
+
+//    ui_DialogPanel = lv_obj_create(ui_ScreenBoards);
+
+//    lv_obj_set_width(ui_DialogPanel, 192);
+//    lv_obj_set_height(ui_DialogPanel, 255);
+
+//    lv_obj_set_x(ui_DialogPanel, 0);
+//    lv_obj_set_y(ui_DialogPanel, 0);
+
+//    lv_obj_set_align(ui_DialogPanel, LV_ALIGN_CENTER);
+
+//    lv_obj_clear_flag(ui_DialogPanel, LV_OBJ_FLAG_SCROLLABLE);
+
+//    lv_obj_set_style_bg_color(ui_DialogPanel, lv_color_hex(0x001622), LV_PART_MAIN | LV_STATE_DEFAULT);
+//    lv_obj_set_style_bg_opa(ui_DialogPanel, 230, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+//    // ui_diaProps
+
+//    ui_diaProps = lv_img_create(ui_DialogPanel);
+//    lv_img_set_src(ui_diaProps, &ui_img_sel_props_png);
+
+//    lv_obj_set_width(ui_diaProps, LV_SIZE_CONTENT);
+//    lv_obj_set_height(ui_diaProps, LV_SIZE_CONTENT);
+
+//    lv_obj_set_x(ui_diaProps, -2);
+//    lv_obj_set_y(ui_diaProps, -98);
+
+//    lv_obj_set_align(ui_diaProps, LV_ALIGN_CENTER);
+
+//    lv_obj_add_flag(ui_diaProps, LV_OBJ_FLAG_ADV_HITTEST);
+//    lv_obj_clear_flag(ui_diaProps, LV_OBJ_FLAG_SCROLLABLE);
+
+//    // ui_diaMoveRight
+
+//    ui_diaMoveRight = lv_img_create(ui_DialogPanel);
+//    lv_img_set_src(ui_diaMoveRight, &ui_img_sel_move_right_png);
+
+//    lv_obj_set_width(ui_diaMoveRight, LV_SIZE_CONTENT);
+//    lv_obj_set_height(ui_diaMoveRight, LV_SIZE_CONTENT);
+
+//    lv_obj_set_x(ui_diaMoveRight, 3);
+//    lv_obj_set_y(ui_diaMoveRight, -49);
+
+//    lv_obj_set_align(ui_diaMoveRight, LV_ALIGN_CENTER);
+
+//    lv_obj_add_flag(ui_diaMoveRight, LV_OBJ_FLAG_ADV_HITTEST);
+//    lv_obj_clear_flag(ui_diaMoveRight, LV_OBJ_FLAG_SCROLLABLE);
+
+//    // ui_diaMoveLeft
+
+//    ui_diaMoveLeft = lv_img_create(ui_DialogPanel);
+//    lv_img_set_src(ui_diaMoveLeft, &ui_img_sel_move_left_png);
+
+//    lv_obj_set_width(ui_diaMoveLeft, LV_SIZE_CONTENT);
+//    lv_obj_set_height(ui_diaMoveLeft, LV_SIZE_CONTENT);
+
+//    lv_obj_set_x(ui_diaMoveLeft, -2);
+//    lv_obj_set_y(ui_diaMoveLeft, 0);
+
+//    lv_obj_set_align(ui_diaMoveLeft, LV_ALIGN_CENTER);
+
+//    lv_obj_add_flag(ui_diaMoveLeft, LV_OBJ_FLAG_ADV_HITTEST);
+//    lv_obj_clear_flag(ui_diaMoveLeft, LV_OBJ_FLAG_SCROLLABLE);
+
+//    // ui_diaRemova
+
+//    ui_diaRemova = lv_img_create(ui_DialogPanel);
+//    lv_img_set_src(ui_diaRemova, &ui_img_sel_remove_png);
+
+//    lv_obj_set_width(ui_diaRemova, LV_SIZE_CONTENT);
+//    lv_obj_set_height(ui_diaRemova, LV_SIZE_CONTENT);
+
+//    lv_obj_set_x(ui_diaRemova, -5);
+//    lv_obj_set_y(ui_diaRemova, 49);
+
+//    lv_obj_set_align(ui_diaRemova, LV_ALIGN_CENTER);
+
+//    lv_obj_add_flag(ui_diaRemova, LV_OBJ_FLAG_ADV_HITTEST);
+//    lv_obj_clear_flag(ui_diaRemova, LV_OBJ_FLAG_SCROLLABLE);
+
+//    // ui_diaEnable
+
+//    ui_diaEnable = lv_img_create(ui_DialogPanel);
+//    lv_img_set_src(ui_diaEnable, &ui_img_sel_enable_png);
+
+//    lv_obj_set_width(ui_diaEnable, LV_SIZE_CONTENT);
+//    lv_obj_set_height(ui_diaEnable, LV_SIZE_CONTENT);
+
+//    lv_obj_set_x(ui_diaEnable, -6);
+//    lv_obj_set_y(ui_diaEnable, 98);
+
+//    lv_obj_set_align(ui_diaEnable, LV_ALIGN_CENTER);
+
+//    lv_obj_add_flag(ui_diaEnable, LV_OBJ_FLAG_ADV_HITTEST);
+//    lv_obj_clear_flag(ui_diaEnable, LV_OBJ_FLAG_SCROLLABLE);
 
 }
 

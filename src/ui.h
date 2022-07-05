@@ -44,22 +44,23 @@ extern lv_obj_t * ui_BtBoardUp;
 extern lv_obj_t * ui_BtBoardDown;
 extern lv_obj_t * ui_BoardIcon;
 
-extern lv_obj_t * ui_Screen1;
-extern lv_obj_t * ui_diaCheck;
 extern lv_obj_t * ui_DialogPanel;
 extern lv_obj_t * ui_diaProps;
 extern lv_obj_t * ui_diaMoveRight;
 extern lv_obj_t * ui_diaMoveLeft;
 extern lv_obj_t * ui_diaRemova;
 extern lv_obj_t * ui_diaEnable;
+extern lv_obj_t * ui_diaClose;
+extern lv_obj_t * ui_diaCheck;
 
 
-LV_IMG_DECLARE(ui_img_sel_check_png);    // assets/sel_check.png
 LV_IMG_DECLARE(ui_img_sel_props_png);    // assets/sel_props.png
 LV_IMG_DECLARE(ui_img_sel_move_right_png);    // assets/sel_move_right.png
 LV_IMG_DECLARE(ui_img_sel_move_left_png);    // assets/sel_move_left.png
 LV_IMG_DECLARE(ui_img_sel_remove_png);    // assets/sel_remove.png
 LV_IMG_DECLARE(ui_img_sel_enable_png);    // assets/sel_enable.png
+LV_IMG_DECLARE(ui_img_sel_close_png);    // assets/sel_close.png
+LV_IMG_DECLARE(ui_img_sel_check_png);    // assets/sel_check.png
 
 LV_IMG_DECLARE(ui_img_disp_background_png);    // assets/disp_background.png
 LV_IMG_DECLARE(ui_img_padels_label_png);    // assets/padels_label.png
