@@ -38,6 +38,7 @@ bool    lock_screen_swipe = false;
 lv_color_t g_default_bg_color;  // global background color
 lv_color_t g_default_fg_color;  // global foreground color
 
+lv_obj_t * ui_draggerObj;
 lv_obj_t * ui_ScreenBoards;
 lv_obj_t * ui_labelPadels;
 lv_obj_t * ui_LabelBoard;
@@ -110,6 +111,16 @@ void load_screen_down(lv_obj_t * screen);
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+static void show(lv_obj_t * widget)
+{
+    lv_obj_clear_flag(widget, LV_OBJ_FLAG_HIDDEN);
+}
+
+static void hide(lv_obj_t * widget)
+{
+    lv_obj_add_flag(widget, LV_OBJ_FLAG_HIDDEN);
+}
+
 static void dialog_show()
 {
     lv_obj_clear_flag(ui_DialogPanel, LV_OBJ_FLAG_HIDDEN);
@@ -396,6 +407,22 @@ static void init_available_pedals(void)
         lv_obj_add_flag(p->widget, LV_OBJ_FLAG_ADV_HITTEST);
         lv_obj_clear_flag(p->widget, LV_OBJ_FLAG_SCROLLABLE);
     }
+
+    // init ui_draggerObj
+    ui_draggerObj = lv_img_create(ui_ScreenBoards);
+    lv_img_set_src(ui_draggerObj, &ui_img_pedal_empty_png);
+
+    lv_obj_set_width(ui_draggerObj, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_draggerObj, LV_SIZE_CONTENT);
+
+    lv_obj_set_x(ui_draggerObj, 0);
+    lv_obj_set_y(ui_draggerObj, 0);
+
+    lv_obj_set_align(ui_draggerObj, LV_ALIGN_OUT_LEFT_TOP);
+
+    lv_obj_add_flag(ui_draggerObj, LV_OBJ_FLAG_ADV_HITTEST);
+    lv_obj_clear_flag(ui_draggerObj, LV_OBJ_FLAG_SCROLLABLE);
+    hide(ui_draggerObj);
 }
 
 ///////////////////// SCREENS ////////////////////
