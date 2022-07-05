@@ -213,10 +213,48 @@ static void OnDiaEvent(lv_event_t * event)
 
 
 
-//static void OnPedalLongClicked(lv_event_t * event)
-//{
-//    LOG("Long Clicked %d", (int) event->user_data);
-//}
+static void OnAvailablePanelEvent(lv_event_t * event)
+{
+    static bool dragging = false;
+    static lv_point_t acc_point = {0,0};
+    lv_point_t current_point;
+    pedal_t * pedal =  (pedal_t *) event->user_data;
+
+    switch(event->code) {
+    case LV_EVENT_LONG_PRESSED:
+        LOG("OnAvailablePanelEvent: Pressed long");
+        lv_obj_set_style_img_recolor_opa(event->target, 64, 0);
+        lv_obj_set_style_img_recolor(event->target, lv_color_hex(PRESSED_COLOR), 0);
+        show(ui_draggerObj);
+        dragging = true;
+        lv_indev_get_vect(global_indev, &acc_point);
+        lv_obj_clear_flag(ui_AvailableHContainer, LV_OBJ_FLAG_SCROLLABLE);
+        break;
+
+    case LV_EVENT_PRESSING:
+        if (dragging) {
+            lv_indev_get_vect(global_indev, &current_point);
+            acc_point.x += current_point.x;
+            acc_point.y += current_point.y;
+            LOG("(%d,%d)", acc_point.x, acc_point.y);
+            lv_obj_set_x(ui_draggerObj, /*start_point.x - */ acc_point.x);
+            lv_obj_set_y(ui_draggerObj, /* start_point.y - */ acc_point.y);
+        }
+
+        break;
+
+    case LV_EVENT_RELEASED:
+        LOG("Pressed pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
+        lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
+        hide(ui_draggerObj);
+        lv_obj_add_flag(ui_AvailableHContainer, LV_OBJ_FLAG_SCROLLABLE);
+        dragging = false;
+
+        break;
+
+    default: break;
+    }
+}
 
 static void OnPedalEvent(lv_event_t * event)
 {
@@ -406,6 +444,9 @@ static void init_available_pedals(void)
 
         lv_obj_add_flag(p->widget, LV_OBJ_FLAG_ADV_HITTEST);
         lv_obj_clear_flag(p->widget, LV_OBJ_FLAG_SCROLLABLE);
+
+        lv_obj_add_flag(p->widget, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_add_event_cb(p->widget, OnAvailablePanelEvent, LV_EVENT_ALL, p);
     }
 
     // init ui_draggerObj
