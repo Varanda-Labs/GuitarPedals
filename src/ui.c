@@ -79,6 +79,23 @@ pedal_t * active_pedal = NULL;
 
 extern lv_indev_t * global_indev;
 
+#define Y_OFFSET_ACROSS_BOARDS 89
+static int board_idx = 0;
+
+const void * numbers[10] = {
+    &ui_img_number_0_png,
+    &ui_img_number_1_png,
+    &ui_img_number_2_png,
+    &ui_img_number_3_png,
+    &ui_img_number_4_png,
+    &ui_img_number_5_png,
+    &ui_img_number_6_png,
+    &ui_img_number_7_png,
+    &ui_img_number_8_png,
+    &ui_img_number_9_png,
+
+};
+
 void load_screen_up(lv_obj_t * screen);
 void load_screen_down(lv_obj_t * screen);
 
@@ -114,6 +131,39 @@ enum {
     DIA_BT__ENABLE,
     DIA_BT__CLOSE,
 };
+
+static void actionDiaProps(void)
+{
+    LOG("actionDiaProps");
+}
+
+static void actionDiaMoveRight(void)
+{
+    LOG("actionDiaMoveRight");
+}
+
+static void actionDiaMoveLeft(void)
+{
+    LOG("actionDiaMoveLeft");
+}
+
+static void actionDiaRemove(void)
+{
+    LOG("OnDiaRemove");
+}
+
+static void actionDiaEnable(void)
+{
+    LOG("OnDiaEnable");
+}
+
+static void actionDiaClose(void)
+{
+    LOG("OnDiaClose");
+    active_pedal = NULL;
+    dialog_hide();
+}
+
 static void OnDiaEvent(lv_event_t * event)
 {
 
@@ -130,7 +180,12 @@ static void OnDiaEvent(lv_event_t * event)
         LOG("OnDiaProps: Released");
 
         switch((int) event->user_data) {
-        case DIA_BT__CLOSE:
+        case DIA_BT__PROPS:         actionDiaProps();       break;
+        case DIA_BT__MOVE_RIGHT:    actionDiaMoveRight();   break;
+        case DIA_BT__MOVE_LEFT:     actionDiaMoveLeft();    break;
+        case DIA_BT__REMOVE:        actionDiaRemove();      break;
+        case DIA_BT__ENABLE:        actionDiaEnable();      break;
+        case DIA_BT__CLOSE:         actionDiaClose();       break;
             active_pedal = NULL;
             dialog_hide();
             break;
@@ -145,39 +200,17 @@ static void OnDiaEvent(lv_event_t * event)
     }
 }
 
-static void OnDiaMoveRight(lv_event_t * event)
-{
-    LOG("OnDiaMoveRight");
-}
 
-static void OnDiaMoveLeft(lv_event_t * event)
-{
-    LOG("OnDiaMoveLeft");
-}
 
-static void OnDiaRemove(lv_event_t * event)
-{
-    LOG("OnDiaRemove");
-}
-
-static void OnDiaEnable(lv_event_t * event)
-{
-    LOG("OnDiaEnable");
-}
-
-static void OnDiaClose(lv_event_t * event)
-{
-    LOG("OnDiaClose");
-}
-
-static void OnPedalLongClicked(lv_event_t * event)
-{
-    LOG("Long Clicked %d", (int) event->user_data);
-}
+//static void OnPedalLongClicked(lv_event_t * event)
+//{
+//    LOG("Long Clicked %d", (int) event->user_data);
+//}
 
 static void OnPedalEvent(lv_event_t * event)
 {
     pedal_t * pedal =  (pedal_t *) event->user_data;
+    static lv_coord_t h_scroll = 0;
 
     switch(event->code) {
     case LV_EVENT_CLICKED:
@@ -198,13 +231,28 @@ static void OnPedalEvent(lv_event_t * event)
         break;
 
     case LV_EVENT_PRESSED:
-        //lv_obj_set_style_img_recolor_opa(img1, intense, 0);
-        //lv_obj_set_style_img_recolor(img1, color, 0);
+        h_scroll = lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer);
+        lv_obj_set_style_img_recolor_opa(event->target, 64, 0);
+        lv_obj_set_style_img_recolor(event->target, lv_color_hex(PRESSED_COLOR), 0);
+        h_scroll = 0;
         lv_obj_set_style_img_recolor(pedal->widget, lv_color_hex(PRESSED_COLOR), 0);
         break;
 
+//    case LV_EVENT_SCROLL:
+//        h_scroll = lv_obj_get_scroll_left(event->target);
+//        break;
+
     case LV_EVENT_RELEASED:
-        LOG("Pressed pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
+        h_scroll = h_scroll - lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer);
+        if (h_scroll < 0) h_scroll = -h_scroll;
+
+        if (h_scroll > 5) {
+            LOG("ignore click as we had H scroll");
+            break;
+        }
+
+        LOG("Pressed pedal type: %d, props: %p, h_scroll = %d", pedal->type, pedal->props.compressor, h_scroll);
+        lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
         if (pedal->props.compressor) {
             active_pedal = pedal;
             dialog_show();
@@ -255,22 +303,7 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
     }
 }
 
-#define Y_OFFSET_ACROSS_BOARDS 89
-static int board_idx = 0;
 
-const void * numbers[10] = {
-    &ui_img_number_0_png,
-    &ui_img_number_1_png,
-    &ui_img_number_2_png,
-    &ui_img_number_3_png,
-    &ui_img_number_4_png,
-    &ui_img_number_5_png,
-    &ui_img_number_6_png,
-    &ui_img_number_7_png,
-    &ui_img_number_8_png,
-    &ui_img_number_9_png,
-
-};
 
 static void update_board_counter(int pos)
 {
