@@ -48,7 +48,7 @@ lv_obj_t * ui_RightArrowPedals;
 lv_obj_t * ui_RightArrowBoard;
 lv_obj_t * ui_BoardCounter;
 lv_obj_t * ui_BoardContainer;
-lv_obj_t * ui_Screen1;
+//lv_obj_t * ui_Screen1;
 lv_obj_t * ui_diaCheck;
 lv_obj_t * ui_DialogPanel;
 lv_obj_t * ui_diaProps;
@@ -74,6 +74,8 @@ lv_obj_t * VolumeLabel;
 lv_obj_t * VolumeSlider;
 lv_obj_t * VolumeCloseButton;
 
+pedal_t * active_pedal = NULL;
+
 extern lv_indev_t * global_indev;
 
 void load_screen_up(lv_obj_t * screen);
@@ -90,6 +92,32 @@ void load_screen_down(lv_obj_t * screen);
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+static void dialog_show()
+{
+    lv_obj_clear_flag(ui_DialogPanel, LV_OBJ_FLAG_HIDDEN);
+}
+
+static void dialog_hide()
+{
+    lv_obj_add_flag(ui_DialogPanel, LV_OBJ_FLAG_HIDDEN);
+}
+
+
+static void OnPedalLongClicked(lv_event_t * event)
+{
+    LOG("Long Clicked %d", (int) event->user_data);
+}
+
+static void OnPedalClicked(lv_event_t * event)
+{
+    pedal_t * pedal =  (pedal_t *) event->user_data;
+    LOG("Clicked pedal type: %d, props: %p", pedal->type, pedal->props.compressor);
+    if (pedal->props.compressor) {
+        active_pedal = pedal;
+        dialog_show();
+    }
+}
+
 static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
 {
     static int start_y = -1;
@@ -435,6 +463,14 @@ void ui_ScreenBoards_screen_init(void)
 
             lv_obj_add_flag(pedal->widget, LV_OBJ_FLAG_ADV_HITTEST);
             lv_obj_clear_flag(pedal->widget, LV_OBJ_FLAG_SCROLLABLE);
+
+            //lv_obj_set_click(pedal->widget, true);
+            lv_obj_add_flag(pedal->widget, LV_OBJ_FLAG_CLICKABLE);
+            lv_obj_add_event_cb(pedal->widget, OnPedalClicked, LV_EVENT_CLICKED, pedal);   /*Assign an event callback*/
+            //lv_obj_add_event_cb(pedal->widget, OnPedalLongClicked, LV_EVENT_LONG_PRESSED, (void *) p_idx);   /*Assign an event callback*/
+
+
+
         }
     }
 
@@ -835,6 +871,7 @@ void ui_init(void)
 
     // just test
     ui_Dialog_init();
+    dialog_hide();
 }
 
 

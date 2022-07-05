@@ -18,11 +18,17 @@
 #include "log.h"
 #include "ui.h"
 #include "pedal.h"
-
+#include <stdlib.h>
 
 static void new_context(pedal_t * pedal)
 {
+    LOG("New Distortion");
+    pedal->props.distortion = calloc(1, sizeof(pedal_props_distortion_t));
+    if (! pedal->props.distortion) {
+        LOG_E("new_context: no memo");
+    }
 
+    // enter default prop values:
 }
 
 static void delete_context(pedal_t * pedal)
