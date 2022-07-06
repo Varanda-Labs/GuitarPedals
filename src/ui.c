@@ -99,6 +99,7 @@ const void * numbers[10] = {
 
 void load_screen_up(lv_obj_t * screen);
 void load_screen_down(lv_obj_t * screen);
+bool insert_pedal(pedal_type_t type, int x);
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
@@ -255,7 +256,7 @@ static void OnAvailablePanelEvent(lv_event_t * event)
             lv_obj_set_x(ui_draggerObj, acc_point.x + lv_obj_get_x(event->target) + DRAG_POS_X_OFFSET);
             lv_obj_set_y(ui_draggerObj, acc_point.y + lv_obj_get_y(event->target) + DRAG_POS_Y_OFFSET);
 
-            if (acc_point.y > GOOD_DRAG_AREA_Y) {
+            if (acc_point.y > GOOD_DRAG_AREA_Y && boards[board_idx].num_pedals < BOARD_MAX_NUM_PEDALS) {
                 if (! in_good_area) {
                     in_good_area = true;
                     lv_obj_set_style_img_recolor(ui_draggerObj, lv_color_hex(DRAG_GOOD_AREA_COLOR), 0);
@@ -276,6 +277,11 @@ static void OnAvailablePanelEvent(lv_event_t * event)
         lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
         hide(ui_draggerObj);
         lv_obj_add_flag(ui_AvailableHContainer, LV_OBJ_FLAG_SCROLLABLE);
+
+        if (in_good_area) {
+            insert_pedal(pedal->type, lv_obj_get_x(ui_draggerObj));
+        }
+
         lv_obj_set_x(ui_draggerObj, -90);
         lv_obj_set_y(ui_draggerObj, -90);
 
@@ -954,6 +960,48 @@ bool add_pedal(pedal_type_t type, pedal_board_t * board)
     return true;
 }
 
+#define PEDAL_OFFSET_IN_BOARD -10
+
+bool insert_pedal(pedal_type_t type, int x)
+{
+    pedal_board_t * board = &boards[board_idx];
+    if (board->num_pedals >= BOARD_MAX_NUM_PEDALS) {
+        LOG_E("Board is full");
+        return false;
+    }
+
+    int idx = (x - PEDAL_OFFSET_IN_BOARD) / 82; // 82 is pedal width
+    LOG("insert_pedal x = %d, idx = %d", x, idx);
+#if 0
+    pedal_t* pedal = &board->pedals[board->num_pedals];
+
+    switch(type) {
+    case PEDAL_TYPE__COMPRESSOR:
+        pedal_init_available_compressor(pedal);
+        break;
+    case PEDAL_TYPE__VOLUME:
+        pedal_init_available_volume(pedal);
+        break;
+    case PEDAL_TYPE__DISTORTION:
+        pedal_init_available_distortion(pedal);
+        break;
+    case PEDAL_TYPE__ECHO:
+        pedal_init_available_echo(pedal);
+        break;
+    case PEDAL_TYPE__FUZZ:
+        pedal_init_available_fuzz(pedal);
+        break;
+    default:
+        LOG_E("unexpected type %d", type);
+        return false;
+    }
+    pedal->pedal_new_context_func_t(pedal);
+    lv_img_set_src(pedal->widget, pedal->normal_img);
+
+    board->num_pedals++;
+#endif
+    return true;
+}
 void ui_Dialog_init(void)
 {
     // ui_DialogPanel
@@ -1135,7 +1183,9 @@ void ui_init(void)
     add_pedal(PEDAL_TYPE__DISTORTION, &boards[1]);
     add_pedal(PEDAL_TYPE__FUZZ, &boards[1]);
     add_pedal(PEDAL_TYPE__ECHO, &boards[1]);
-    add_pedal(PEDAL_TYPE__VOLUME, &boards[2]);
+    add_pedal(PEDAL_TYPE__COMPRESSOR, &boards[1]);
+    add_pedal(PEDAL_TYPE__ECHO, &boards[1]);
+    add_pedal(PEDAL_TYPE__VOLUME, &boards[1]);
 
     add_pedal(PEDAL_TYPE__DISTORTION, &boards[2]);
     add_pedal(PEDAL_TYPE__ECHO, &boards[2]);
