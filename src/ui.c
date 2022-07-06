@@ -962,6 +962,35 @@ bool add_pedal(pedal_type_t type, pedal_board_t * board)
 
 #define PEDAL_OFFSET_IN_BOARD -10
 
+void shift_pedals_right(int idx)
+{
+    pedal_board_t * board = &boards[board_idx];
+    int move_to = board->num_pedals;
+    int move_from = move_to - 1;
+    lv_obj_t * save_widget;
+
+    while(move_to > idx) {
+        LOG("pedals[%d] = pedals[%d]", move_to, move_from);
+        save_widget = board->pedals[move_to].widget;
+        memcpy(&board->pedals[move_to], &board->pedals[move_from], sizeof(pedal_t));
+        board->pedals[move_to].widget = save_widget;
+        lv_img_set_src(board->pedals[move_to].widget, board->pedals[move_to].normal_img);
+        move_to--;
+        move_from--;
+    }
+    board->num_pedals++;
+
+    //    while(idx < board->num_pedals) {
+    //        LOG("pedals[%d] = pedals[%d]", idx+1, idx);
+    //        //board->pedals[idx + 1] = board->pedals[idx];
+    ////        memcpy(&board->pedals[idx + 1], &board->pedals[idx], sizeof(pedal_t));
+    //        board->pedals[idx + 1].normal_img = board->pedals[idx].normal_img;
+    //        idx++;
+
+    //    lv_img_set_src(board->pedals[idx].widget, board->pedals[idx].normal_img);
+
+}
+
 bool insert_pedal(pedal_type_t type, int x)
 {
     pedal_board_t * board = &boards[board_idx];
@@ -970,10 +999,25 @@ bool insert_pedal(pedal_type_t type, int x)
         return false;
     }
 
-    int idx = (x - PEDAL_OFFSET_IN_BOARD) / 82; // 82 is pedal width
+    int idx = (x - PEDAL_OFFSET_IN_BOARD + lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer)) / 82; // 82 is pedal width
+    if (idx >= BOARD_MAX_NUM_PEDALS) idx = BOARD_MAX_NUM_PEDALS - 1;
     LOG("insert_pedal x = %d, idx = %d", x, idx);
-#if 0
-    pedal_t* pedal = &board->pedals[board->num_pedals];
+
+/*
+ * cases:
+ *   1- idx >= num_pedals: just add
+ *
+ * */
+
+    if (idx < board->num_pedals) {
+        LOG("shift pedals right");
+        shift_pedals_right(idx);
+    }
+    else {
+        idx = board->num_pedals;
+    }
+
+    pedal_t* pedal = &board->pedals[idx];
 
     switch(type) {
     case PEDAL_TYPE__COMPRESSOR:
@@ -999,7 +1043,7 @@ bool insert_pedal(pedal_type_t type, int x)
     lv_img_set_src(pedal->widget, pedal->normal_img);
 
     board->num_pedals++;
-#endif
+
     return true;
 }
 void ui_Dialog_init(void)
