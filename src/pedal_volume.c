@@ -40,8 +40,8 @@ static void delete_context(pedal_t * pedal)
 
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
-                                                    int num_input_samples,
-                                                    int * num_output_samples)
+                                         int num_input_samples,
+                                         int * num_output_samples)
 {
     return NULL;
 }
@@ -51,8 +51,6 @@ void pedal_init_available_volume(void * _pedal)
     pedal_t * pedal = (pedal_t *) _pedal;
     pedal->PropScreen = NULL;        // properties screen
     pedal->normal_img = &ui_img_pedal_volume_png;         // normal image
-    pedal->highlighted_img = NULL;    // pressed or selected image
-    pedal->pos_idx = 0;            // position index (inside Board container)
     pedal->type = PEDAL_TYPE__VOLUME;
     pedal->props.compressor = NULL,            // properties
     pedal->pedal_new_context_func_t = new_context;

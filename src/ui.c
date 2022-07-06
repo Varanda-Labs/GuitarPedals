@@ -513,7 +513,7 @@ static void init_available_pedals(void)
 }
 
 ///////////////////// SCREENS ////////////////////
-void ui_ScreenBoards_screen_init(void)
+void init_ScreenBoards(void)
 {
 
     // ui_ScreenBoards
@@ -1002,6 +1002,7 @@ void reset_panels_idx_positions()
 
 bool remove_pedal(int idx)
 {
+    LOG("remove_pedal idx: %d", idx);
     pedal_board_t * board = &boards[board_idx];
     if (idx >= board->num_pedals) {
         LOG_E("pedal not found");
@@ -1030,6 +1031,7 @@ bool remove_pedal(int idx)
         }
         LOG("Wipe pedal %d", board->num_pedals-1);
         board->pedals[board->num_pedals-1].props.compressor = 0;
+        //board->pedals[board->num_pedals-1].
         lv_img_set_src(board->pedals[board->num_pedals-1].widget, &ui_img_pedal_empty_png);
         board->pedals[board->num_pedals-1].normal_img = &ui_img_pedal_empty_png;
     }
@@ -1260,7 +1262,7 @@ void ui_init(void)
     lv_disp_set_bg_image(dispp, &ui_img_disp_background_png);
     lv_disp_set_bg_opa(dispp, 255);
 
-    ui_ScreenBoards_screen_init();
+    init_ScreenBoards();
     ScreenVolume_screen_init();
 
     lv_disp_load_scr(ui_ScreenBoards);

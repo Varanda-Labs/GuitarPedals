@@ -50,8 +50,6 @@ void pedal_init_available_compressor(void * _pedal)
     pedal_t * pedal = (pedal_t *) _pedal;
     pedal->PropScreen = NULL;        // properties screen
     pedal->normal_img = &ui_img_pedal_compr_png;         // normal image
-    pedal->highlighted_img = NULL;    // pressed or selected image
-    pedal->pos_idx = 0;            // position index (inside Board container)
     pedal->type = PEDAL_TYPE__COMPRESSOR;
     pedal->props.compressor = NULL,            // properties
     pedal->pedal_new_context_func_t = new_context;
