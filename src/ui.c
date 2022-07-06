@@ -133,6 +133,8 @@ static void dialog_hide()
 
 #define PRESSED_COLOR 0x72C250
 #define RELEASED_COLOR 0x47DFFF
+#define DRAG_BAD_AREA_COLOR 0xff0000
+#define DRAG_GOOD_AREA_COLOR 0x00ff00
 
 enum {
     DIA_BT__PROPS,
@@ -211,12 +213,20 @@ static void OnDiaEvent(lv_event_t * event)
     }
 }
 
+#define AVAILABLE_CONTAINER_X_OFFSET 18
+#define AVAILABLE_CONTAINER_Y_OFFSET 34
+#define PEDAL_WIDTH
 
+#define GOOD_DRAG_AREA_Y    100
+
+#define DRAG_POS_X_OFFSET (AVAILABLE_CONTAINER_X_OFFSET + 41) // 41 is pedal image 82/2
+#define DRAG_POS_Y_OFFSET (AVAILABLE_CONTAINER_Y_OFFSET + 41 - 22)
 
 static void OnAvailablePanelEvent(lv_event_t * event)
 {
     static bool dragging = false;
     static lv_point_t acc_point = {0,0};
+    static bool in_good_area = false;
     lv_point_t current_point;
     pedal_t * pedal =  (pedal_t *) event->user_data;
 
@@ -225,10 +235,16 @@ static void OnAvailablePanelEvent(lv_event_t * event)
         LOG("OnAvailablePanelEvent: Pressed long");
         lv_obj_set_style_img_recolor_opa(event->target, 64, 0);
         lv_obj_set_style_img_recolor(event->target, lv_color_hex(PRESSED_COLOR), 0);
-        show(ui_draggerObj);
+
         dragging = true;
         lv_indev_get_vect(global_indev, &acc_point);
         lv_obj_clear_flag(ui_AvailableHContainer, LV_OBJ_FLAG_SCROLLABLE);
+
+        lv_img_set_src(ui_draggerObj, pedal->normal_img);
+        lv_obj_set_style_img_recolor_opa(ui_draggerObj, 128, 0);
+        lv_obj_set_style_img_recolor(ui_draggerObj, lv_color_hex(DRAG_BAD_AREA_COLOR), 0);
+        in_good_area = false;
+        show(ui_draggerObj);
         break;
 
     case LV_EVENT_PRESSING:
@@ -236,9 +252,21 @@ static void OnAvailablePanelEvent(lv_event_t * event)
             lv_indev_get_vect(global_indev, &current_point);
             acc_point.x += current_point.x;
             acc_point.y += current_point.y;
-            LOG("(%d,%d)", acc_point.x, acc_point.y);
-            lv_obj_set_x(ui_draggerObj, /*start_point.x - */ acc_point.x);
-            lv_obj_set_y(ui_draggerObj, /* start_point.y - */ acc_point.y);
+            lv_obj_set_x(ui_draggerObj, acc_point.x + lv_obj_get_x(event->target) + DRAG_POS_X_OFFSET);
+            lv_obj_set_y(ui_draggerObj, acc_point.y + lv_obj_get_y(event->target) + DRAG_POS_Y_OFFSET);
+
+            if (acc_point.y > GOOD_DRAG_AREA_Y) {
+                if (! in_good_area) {
+                    in_good_area = true;
+                    lv_obj_set_style_img_recolor(ui_draggerObj, lv_color_hex(DRAG_GOOD_AREA_COLOR), 0);
+                }
+            } else {
+                if (in_good_area) {
+                    in_good_area = false;
+                    lv_obj_set_style_img_recolor(ui_draggerObj, lv_color_hex(DRAG_BAD_AREA_COLOR), 0);
+                }
+            }
+
         }
 
         break;
@@ -248,6 +276,9 @@ static void OnAvailablePanelEvent(lv_event_t * event)
         lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
         hide(ui_draggerObj);
         lv_obj_add_flag(ui_AvailableHContainer, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_set_x(ui_draggerObj, -90);
+        lv_obj_set_y(ui_draggerObj, -90);
+
         dragging = false;
 
         break;
@@ -409,7 +440,7 @@ static void init_available_pedals(void)
     lv_obj_set_width(ui_AvailableHContainer, 345);
     lv_obj_set_height(ui_AvailableHContainer, 89);
 
-    lv_obj_set_x(ui_AvailableHContainer, 18);
+    lv_obj_set_x(ui_AvailableHContainer, AVAILABLE_CONTAINER_X_OFFSET);
     lv_obj_set_y(ui_AvailableHContainer, 0);
 
     lv_obj_set_align(ui_AvailableHContainer, LV_ALIGN_LEFT_MID);
@@ -456,8 +487,9 @@ static void init_available_pedals(void)
     lv_obj_set_width(ui_draggerObj, LV_SIZE_CONTENT);
     lv_obj_set_height(ui_draggerObj, LV_SIZE_CONTENT);
 
-    lv_obj_set_x(ui_draggerObj, 0);
-    lv_obj_set_y(ui_draggerObj, 0);
+
+    lv_obj_set_x(ui_draggerObj, -90);
+    lv_obj_set_y(ui_draggerObj, -90);
 
     lv_obj_set_align(ui_draggerObj, LV_ALIGN_OUT_LEFT_TOP);
 
@@ -776,7 +808,7 @@ void ui_ScreenBoards_screen_init(void)
     lv_obj_set_height(ui_AvailableContainer, 89);
 
     lv_obj_set_x(ui_AvailableContainer, 6);
-    lv_obj_set_y(ui_AvailableContainer, 34);
+    lv_obj_set_y(ui_AvailableContainer, AVAILABLE_CONTAINER_Y_OFFSET);
 
     lv_obj_clear_flag(ui_AvailableContainer, LV_OBJ_FLAG_SCROLLABLE);
 
