@@ -18,17 +18,26 @@
 #include "log.h"
 #include "ui.h"
 #include "pedal.h"
-
+#include <stdlib.h>
 
 static void new_context(pedal_t * pedal)
 {
+    LOG("New Volume");
+    pedal->props.volume = calloc(1, sizeof(pedal_props_volume_t));
+    if (! pedal->props.volume) {
+        LOG_E("new_context: no memo");
+    }
 
+    // enter default prop values:
 }
 
 static void delete_context(pedal_t * pedal)
 {
-
+    LOG("Delete Volume");
+    free(pedal->props.volume);
+    pedal->props.volume = NULL;
 }
+
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
                                                     int num_input_samples,

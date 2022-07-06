@@ -18,17 +18,26 @@
 #include "log.h"
 #include "ui.h"
 #include "pedal.h"
-
+#include <stdlib.h>
 
 static void new_context(pedal_t * pedal)
 {
+    LOG("New Fuzz");
+    pedal->props.fuzz = calloc(1, sizeof(pedal_props_fuzz_t));
+    if (! pedal->props.fuzz) {
+        LOG_E("new_context: no memo");
+    }
 
+    // enter default prop values:
 }
 
 static void delete_context(pedal_t * pedal)
 {
-
+    LOG("Delete Fuzz");
+    free(pedal->props.fuzz);
+    pedal->props.fuzz = NULL;
 }
+
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
                                                     int num_input_samples,

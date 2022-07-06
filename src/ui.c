@@ -100,6 +100,8 @@ const void * numbers[10] = {
 void load_screen_up(lv_obj_t * screen);
 void load_screen_down(lv_obj_t * screen);
 bool insert_pedal(pedal_type_t type, int x);
+bool remove_pedal(int idx);
+void reset_panels_idx_positions();
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
@@ -164,6 +166,11 @@ static void actionDiaMoveLeft(void)
 static void actionDiaRemove(void)
 {
     LOG("OnDiaRemove");
+    if ( ! active_pedal) {
+        LOG_E("no active pedal");
+        return;
+    }
+    remove_pedal(active_pedal->pos_idx);
 }
 
 static void actionDiaEnable(void)
@@ -200,14 +207,12 @@ static void OnDiaEvent(lv_event_t * event)
         case DIA_BT__REMOVE:        actionDiaRemove();      break;
         case DIA_BT__ENABLE:        actionDiaEnable();      break;
         case DIA_BT__CLOSE:         actionDiaClose();       break;
-            active_pedal = NULL;
-            dialog_hide();
-            break;
-
         default:
             LOG_E("Unexpected dialog button %d", (int) event->user_data);
+            break;
         }
-
+        active_pedal = NULL;
+        dialog_hide();
         break;
 
     default: break;
@@ -320,7 +325,7 @@ static void OnPedalEvent(lv_event_t * event)
         h_scroll = lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer);
         lv_obj_set_style_img_recolor_opa(event->target, 64, 0);
         lv_obj_set_style_img_recolor(event->target, lv_color_hex(PRESSED_COLOR), 0);
-        h_scroll = 0;
+        h_scroll = lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer);
         lv_obj_set_style_img_recolor(pedal->widget, lv_color_hex(PRESSED_COLOR), 0);
         break;
 
@@ -339,6 +344,9 @@ static void OnPedalEvent(lv_event_t * event)
         if (pedal->props.compressor) {
             active_pedal = pedal;
             dialog_show();
+        }
+        else {
+            LOG("pedal not initialized");
         }
         break;
 
@@ -695,6 +703,7 @@ void ui_ScreenBoards_screen_init(void)
             pedal->normal_img = &ui_img_pedal_empty_png;
             pedal->widget = lv_img_create(board->ui_BoardHContainer);
             lv_img_set_src(pedal->widget, pedal->normal_img);
+            pedal->pos_idx = p_idx;
 
             lv_obj_set_width(pedal->widget, LV_SIZE_CONTENT);
             lv_obj_set_height(pedal->widget, LV_SIZE_CONTENT);
@@ -956,7 +965,7 @@ bool add_pedal(pedal_type_t type, pedal_board_t * board)
     lv_img_set_src(pedal->widget, pedal->normal_img);
 
     board->num_pedals++;
-
+    reset_panels_idx_positions();
     return true;
 }
 
@@ -968,27 +977,70 @@ void shift_pedals_right(int idx)
     int move_to = board->num_pedals;
     int move_from = move_to - 1;
     lv_obj_t * save_widget;
+    int save_pos_idx;
 
     while(move_to > idx) {
         LOG("pedals[%d] = pedals[%d]", move_to, move_from);
         save_widget = board->pedals[move_to].widget;
+        save_pos_idx = board->pedals[move_to].pos_idx;
         memcpy(&board->pedals[move_to], &board->pedals[move_from], sizeof(pedal_t));
         board->pedals[move_to].widget = save_widget;
+        board->pedals[move_to].pos_idx = save_pos_idx;
         lv_img_set_src(board->pedals[move_to].widget, board->pedals[move_to].normal_img);
         move_to--;
         move_from--;
     }
     board->num_pedals++;
+}
 
-    //    while(idx < board->num_pedals) {
-    //        LOG("pedals[%d] = pedals[%d]", idx+1, idx);
-    //        //board->pedals[idx + 1] = board->pedals[idx];
-    ////        memcpy(&board->pedals[idx + 1], &board->pedals[idx], sizeof(pedal_t));
-    //        board->pedals[idx + 1].normal_img = board->pedals[idx].normal_img;
-    //        idx++;
+void reset_panels_idx_positions()
+{
+    pedal_board_t * board = &boards[board_idx];
+    for (int i = 0; i<BOARD_MAX_NUM_PEDALS; i++)
+        board->pedals[i].pos_idx = i;
+}
 
-    //    lv_img_set_src(board->pedals[idx].widget, board->pedals[idx].normal_img);
+bool remove_pedal(int idx)
+{
+    pedal_board_t * board = &boards[board_idx];
+    if (idx >= board->num_pedals) {
+        LOG_E("pedal not found");
+        return false;
+    }
+    if (board->pedals[idx].pedal_delete_context_func_t) {
+        board->pedals[idx].pedal_delete_context_func_t(&board->pedals[idx]);
+    }
 
+    // if need to shift left
+    if (idx < board->num_pedals - 1) {
+        int move_from = idx + 1;
+        int move_to = idx;
+        lv_obj_t * save_widget;
+        int save_pos_idx;
+        while(move_to < board->num_pedals - 1) {
+            LOG("pedals[%d] = pedals[%d]", move_to, move_from);
+            save_widget = board->pedals[move_to].widget;
+            save_pos_idx = board->pedals[move_to].pos_idx;
+            memcpy(&board->pedals[move_to], &board->pedals[move_from], sizeof(pedal_t));
+            board->pedals[move_to].widget = save_widget;
+            board->pedals[move_to].pos_idx = save_pos_idx;
+            lv_img_set_src(board->pedals[move_to].widget, board->pedals[move_to].normal_img);
+            move_to++;
+            move_from++;
+        }
+        LOG("Wipe pedal %d", board->num_pedals-1);
+        board->pedals[board->num_pedals-1].props.compressor = 0;
+        lv_img_set_src(board->pedals[board->num_pedals-1].widget, &ui_img_pedal_empty_png);
+        board->pedals[board->num_pedals-1].normal_img = &ui_img_pedal_empty_png;
+    }
+    else {
+        lv_img_set_src(board->pedals[idx].widget, &ui_img_pedal_empty_png);
+        board->pedals[idx].normal_img = &ui_img_pedal_empty_png;
+    }
+    board->num_pedals--;
+    LOG("num_pedals = %d", board->num_pedals);
+    reset_panels_idx_positions();
+    return true;
 }
 
 bool insert_pedal(pedal_type_t type, int x)
@@ -1002,12 +1054,6 @@ bool insert_pedal(pedal_type_t type, int x)
     int idx = (x - PEDAL_OFFSET_IN_BOARD + lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer)) / 82; // 82 is pedal width
     if (idx >= BOARD_MAX_NUM_PEDALS) idx = BOARD_MAX_NUM_PEDALS - 1;
     LOG("insert_pedal x = %d, idx = %d", x, idx);
-
-/*
- * cases:
- *   1- idx >= num_pedals: just add
- *
- * */
 
     if (idx < board->num_pedals) {
         LOG("shift pedals right");
@@ -1043,7 +1089,7 @@ bool insert_pedal(pedal_type_t type, int x)
     lv_img_set_src(pedal->widget, pedal->normal_img);
 
     board->num_pedals++;
-
+    reset_panels_idx_positions();
     return true;
 }
 void ui_Dialog_init(void)

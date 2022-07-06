@@ -33,7 +33,9 @@ static void new_context(pedal_t * pedal)
 
 static void delete_context(pedal_t * pedal)
 {
-
+    LOG("Delete Distortion");
+    free(pedal->props.distortion);
+    pedal->props.distortion = NULL;
 }
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
