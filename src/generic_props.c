@@ -51,6 +51,7 @@ lv_obj_t * ui_Checkbox1;
     #error "#error LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
 #endif
 
+extern lv_color_t g_default_fg_color;  // global foreground color
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
@@ -69,10 +70,10 @@ static generic_props_ctl_t * g = NULL;
 
 void OnSliderChange(lv_event_t * event)
 {
-    int idx = (int) event->user_data;
-    g->generic_slider[idx].slider_pos = (int)lv_slider_get_value(event->target);
-    if (g->generic_slider[idx].process_slider_input_func_t)
-        g->generic_slider[idx].process_slider_input_func_t(&g->generic_slider[idx]);
+//    int idx = (int) event->user_data;
+//    g->generic_slider[idx].slider_pos = (int)lv_slider_get_value(event->target);
+//    if (g->generic_slider[idx].process_slider_input_func_t)
+//        g->generic_slider[idx].process_slider_input_func_t(&g->generic_slider[idx]);
 }
 
 void OnCheckChange(lv_event_t * event)
@@ -81,10 +82,15 @@ void OnCheckChange(lv_event_t * event)
     g->generic_check[idx].check = lv_obj_has_state(event->target, LV_STATE_CHECKED);
 }
 
+static void set_slider_pos(lv_obj_t * slider, int val)
+{
+    lv_slider_set_value(slider, val, LV_ANIM_OFF);
+}
+
 void set_generic_props_ctl(generic_props_ctl_t * generic_props_ctl)
 {
     g = generic_props_ctl;
-#if 0
+#if 1
     hide(ui_Slider0);
     hide(ui_LabelSlider0);
     hide(ui_val0);
@@ -100,26 +106,32 @@ void set_generic_props_ctl(generic_props_ctl_t * generic_props_ctl)
     hide(ui_Checkbox0);
     hide(ui_Checkbox1);
 #endif
-    lv_label_set_text(ui_val0, g->info);
+    lv_label_set_text(ui_LabelInfo, g->info);
 
     if (g->generic_slider[0].slider_label) {
         lv_label_set_text(ui_LabelSlider0, g->generic_slider[0].slider_label);
-        lv_slider_set_value(ui_LabelSlider0, g->generic_slider[0].slider_pos, false);
+        set_slider_pos(ui_Slider0, g->generic_slider[0].slider_pos);
         lv_label_set_text(ui_val0, g->generic_slider[0].prop_val_text);
+        show(ui_Slider0);
+        show(ui_val0);
         show(ui_LabelSlider0);
     }
 
     if (g->generic_slider[1].slider_label) {
         lv_label_set_text(ui_LabelSlider1, g->generic_slider[1].slider_label);
-        lv_slider_set_value(ui_LabelSlider1, g->generic_slider[1].slider_pos, false);
+        set_slider_pos(ui_Slider1, 50);//g->generic_slider[1].slider_pos);
         lv_label_set_text(ui_val1, g->generic_slider[1].prop_val_text);
+        show(ui_Slider1);
+        show(ui_val1);
         show(ui_LabelSlider1);
     }
 
     if (g->generic_slider[2].slider_label) {
         lv_label_set_text(ui_LabelSlider2, g->generic_slider[2].slider_label);
-        lv_slider_set_value(ui_LabelSlider2, g->generic_slider[2].slider_pos, false);
+        set_slider_pos(ui_Slider2, g->generic_slider[2].slider_pos);
         lv_label_set_text(ui_val2, g->generic_slider[2].prop_val_text);
+        show(ui_Slider2);
+        show(ui_val2);
         show(ui_LabelSlider2);
     }
 
@@ -171,7 +183,8 @@ void ui_genericPropScreen_screen_init(void)
 
     lv_obj_set_align(ui_LabelInfo, LV_ALIGN_CENTER);
 
-    lv_label_set_text(ui_LabelInfo, "Plug-in: Volume\nVersion: 0.0.1\nBy: Varanda Labs");
+    lv_obj_set_style_text_color(ui_LabelInfo, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_label_set_text(ui_LabelInfo, "Plug-in: \nVersion:\nBy:");
 
     // ui_Slider0
 
@@ -199,6 +212,7 @@ void ui_genericPropScreen_screen_init(void)
 
     lv_obj_set_align(ui_LabelSlider0, LV_ALIGN_CENTER);
 
+    lv_obj_set_style_text_color(ui_LabelSlider0, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_label_set_text(ui_LabelSlider0, "Volume:");
 
     // ui_Slider1
@@ -227,6 +241,7 @@ void ui_genericPropScreen_screen_init(void)
 
     lv_obj_set_align(ui_LabelSlider1, LV_ALIGN_CENTER);
 
+    lv_obj_set_style_text_color(ui_LabelSlider1, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_label_set_text(ui_LabelSlider1, "Volume:");
 
     // ui_LabelSlider2
@@ -241,6 +256,7 @@ void ui_genericPropScreen_screen_init(void)
 
     lv_obj_set_align(ui_LabelSlider2, LV_ALIGN_CENTER);
 
+    lv_obj_set_style_text_color(ui_LabelSlider2, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_label_set_text(ui_LabelSlider2, "Volume:");
 
     // ui_Slider2
