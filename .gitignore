@@ -53,5 +53,9 @@ dkms.conf
 
 design/cache
 design/backup
+design/dialog/backup/
+design/generic_props/backup
+design/generic_props/code
+
 .DS_Store**
 

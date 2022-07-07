@@ -1,5 +1,24 @@
+/***************************************************************
+ *
+ *                 This code is part of GuitarPedals
+ *
+ * Copyrights 2022 - Varanda Labs Inc.
+ *
+ * License:
+ *   Creative Commons: CC BY-NC-SA 4.0
+ *   Attribution-NonCommercial-ShareAlike 4.0 International
+ *   https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+ *
+ *   Note: for purchasing a commertial license contact:
+ *     m@varanda.ca
+ *
+ ***************************************************************
+ */
+
 #ifndef GENERIC_PROPS_CTL_H
 #define GENERIC_PROPS_CTL_H
+
+#define MAX_PROP_VAL_TEXT   16
 
 typedef void (*process_slider_input_func_t) (   int slider_pos,
                                                 int * prop_val);
@@ -7,9 +26,9 @@ typedef void (*process_slider_input_func_t) (   int slider_pos,
 
 typedef struct generic_slider_st
 {
-    const char *    slider_label;   // label
-    int             slider_pos;     // 0~100 position in/out
-    int             prop_val;       // val
+    const char *    slider_label;                   // label
+    int             slider_pos;                     // 0~100 position in/out
+    char            prop_val[MAX_PROP_VAL_TEXT];    // val
     void            (*process_slider_input_func_t) (struct generic_slider_st * generic_slider);
 } generic_slider_t;
 
@@ -26,5 +45,9 @@ typedef struct generic_props_ctl_st
     generic_slider_t generic_slider[3];
     generic_check_t generic_check[2];
 } generic_props_ctl_t;
+
+void set_generic_props_ctl(generic_props_ctl_t * _generic_props_ctl);
+void ui_genericPropScreen_screen_init(void);
+
 
 #endif // GENERIC_PROPS_CTL_H
