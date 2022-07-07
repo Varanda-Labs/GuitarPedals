@@ -20,6 +20,16 @@
 #include "pedal.h"
 #include <stdlib.h>
 
+#define DELAY_SLIDER_IDX 0
+#define GAIN_SLIDER_IDX 2
+
+static const char * info = { "Plug-in: Echo\nVersion: 0.0.1\nBy: Varanda Labs"};
+static const char * delay_text = { "Delay (ms):"};
+static const char * gain_text = { "Gain:"};
+
+static const char * check_text = { "Across R/L:"};
+
+
 static void new_context(pedal_t * pedal)
 {
     LOG("New Echo");
@@ -29,6 +39,23 @@ static void new_context(pedal_t * pedal)
     }
 
     // enter default prop values:
+    pedal->props.volume->generic_props.info = info;
+
+    pedal->props.volume->generic_props.generic_slider[DELAY_SLIDER_IDX].slider_label = delay_text;
+    pedal->props.volume->generic_props.generic_slider[DELAY_SLIDER_IDX].slider_pos = 1;
+    snprintf(   pedal->props.volume->generic_props.generic_slider[DELAY_SLIDER_IDX].prop_val_text,
+                MAX_PROP_VAL_TEXT,
+                "%d ms",
+                10);
+
+    pedal->props.volume->generic_props.generic_slider[GAIN_SLIDER_IDX].slider_label = gain_text;
+    pedal->props.volume->generic_props.generic_slider[GAIN_SLIDER_IDX].slider_pos = 20;
+    snprintf(   pedal->props.volume->generic_props.generic_slider[GAIN_SLIDER_IDX].prop_val_text,
+                MAX_PROP_VAL_TEXT,
+                "%.2f",
+                0.2);
+
+    pedal->props.volume->generic_props.generic_check[0].check_label = check_text;
 }
 
 static void delete_context(pedal_t * pedal)

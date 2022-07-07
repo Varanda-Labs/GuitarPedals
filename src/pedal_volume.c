@@ -23,6 +23,8 @@
 static const char * info = { "Plug-in: Volume\nVersion: 0.0.1\nBy: Varanda Labs"};
 static const char * volume_label = { "Volume:"};
 
+#define VOLUME_SLIDER_IDX 1
+
 static void new_context(pedal_t * pedal)
 {
     LOG("New Volume");
@@ -33,9 +35,9 @@ static void new_context(pedal_t * pedal)
 
     // enter default prop values:
     pedal->props.volume->generic_props.info = info;
-    pedal->props.volume->generic_props.generic_slider[1].slider_label = volume_label;
-    pedal->props.volume->generic_props.generic_slider[1].slider_pos = 100;
-    snprintf(   pedal->props.volume->generic_props.generic_slider[1].prop_val_text,
+    pedal->props.volume->generic_props.generic_slider[VOLUME_SLIDER_IDX].slider_label = volume_label;
+    pedal->props.volume->generic_props.generic_slider[VOLUME_SLIDER_IDX].slider_pos = 100;
+    snprintf(   pedal->props.volume->generic_props.generic_slider[VOLUME_SLIDER_IDX].prop_val_text,
                 MAX_PROP_VAL_TEXT,
                 "%d %%",
                 100);

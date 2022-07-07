@@ -90,7 +90,7 @@ static void set_slider_pos(lv_obj_t * slider, int val)
 void set_generic_props_ctl(generic_props_ctl_t * generic_props_ctl)
 {
     g = generic_props_ctl;
-#if 1
+
     hide(ui_Slider0);
     hide(ui_LabelSlider0);
     hide(ui_val0);
@@ -105,7 +105,7 @@ void set_generic_props_ctl(generic_props_ctl_t * generic_props_ctl)
 
     hide(ui_Checkbox0);
     hide(ui_Checkbox1);
-#endif
+
     lv_label_set_text(ui_LabelInfo, g->info);
 
     if (g->generic_slider[0].slider_label) {
@@ -273,8 +273,12 @@ void ui_genericPropScreen_screen_init(void)
     lv_obj_set_align(ui_Slider2, LV_ALIGN_TOP_RIGHT);
     lv_obj_add_event_cb(ui_Slider2, OnSliderChange, LV_EVENT_VALUE_CHANGED, (void *) 2);
 
-    // ui_Checkbox0
+    // ui_Checkbox style
+    static lv_style_t style_indic;
+    lv_style_init(&style_indic);
+    lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_BLUE));
 
+    // ui_Checkbox0
     ui_Checkbox0 = lv_checkbox_create(ui_genericPropScreen);
     lv_checkbox_set_text(ui_Checkbox0, "Checkbox");
 
@@ -288,6 +292,9 @@ void ui_genericPropScreen_screen_init(void)
 
     lv_obj_add_flag(ui_Checkbox0, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
     lv_obj_add_event_cb(ui_Checkbox0, OnCheckChange, LV_EVENT_VALUE_CHANGED, (void *) 0);
+    lv_obj_set_style_text_color(ui_Checkbox0, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+
 
     // ui_Checkbox1
 
@@ -317,6 +324,7 @@ void ui_genericPropScreen_screen_init(void)
 
     lv_obj_set_align(ui_val0, LV_ALIGN_CENTER);
 
+    lv_obj_set_style_text_color(ui_val0, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_label_set_text(ui_val0, "Text");
 
     // ui_val1
@@ -331,6 +339,7 @@ void ui_genericPropScreen_screen_init(void)
 
     lv_obj_set_align(ui_val1, LV_ALIGN_CENTER);
 
+    lv_obj_set_style_text_color(ui_val1, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_label_set_text(ui_val1, "Text");
 
     // ui_val2
@@ -345,6 +354,7 @@ void ui_genericPropScreen_screen_init(void)
 
     lv_obj_set_align(ui_val2, LV_ALIGN_CENTER);
 
+    lv_obj_set_style_text_color(ui_val2, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_label_set_text(ui_val2, "Text");
 
 }
