@@ -19,10 +19,11 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "generic_props_ctl.h"
 
 typedef struct pedal_props_fuzz_st
 {
-    int     level;
+    generic_props_ctl_t generic_props;
 } pedal_props_fuzz_t;
 
 void pedal_init_available_fuzz(void * pedal);

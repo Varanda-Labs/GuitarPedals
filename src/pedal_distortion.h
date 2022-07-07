@@ -19,11 +19,13 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "generic_props_ctl.h"
 
 typedef struct pedal_props_distortion_st
 {
-    int     gain;
-    int     clipping;
+    generic_props_ctl_t generic_props;
+//    int     gain;
+//    int     clipping;
 } pedal_props_distortion_t;
 
 void pedal_init_available_distortion(void * pedal);

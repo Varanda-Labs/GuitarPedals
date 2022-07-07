@@ -19,12 +19,14 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "generic_props_ctl.h"
 
 typedef struct pedal_props_echo_st
 {
-    int                     delay;          //  in milliseconds
-    float                   feedback_gain;
-    int                     num_samples;    //
+    generic_props_ctl_t generic_props;
+//    int                     delay;          //  in milliseconds
+//    float                   feedback_gain;
+//    int                     num_samples;    //
     uint32_t *        samples;        // 32 bits: 16 for left, 16 for right
 } pedal_props_echo_t;
 
