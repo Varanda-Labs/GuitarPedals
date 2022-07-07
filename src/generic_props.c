@@ -23,7 +23,8 @@
 #include "pedal.h"
 
 ///////////////////// VARIABLES ////////////////////
-lv_obj_t * ui_genericPropScreen;
+//lv_obj_t * ui_genericPropScreen;
+void * ui_genericPropScreen;
 
 lv_obj_t * ui_LabelInfo;
 
@@ -83,7 +84,7 @@ void OnCheckChange(lv_event_t * event)
 void set_generic_props_ctl(generic_props_ctl_t * generic_props_ctl)
 {
     g = generic_props_ctl;
-
+#if 0
     hide(ui_Slider0);
     hide(ui_LabelSlider0);
     hide(ui_val0);
@@ -98,27 +99,27 @@ void set_generic_props_ctl(generic_props_ctl_t * generic_props_ctl)
 
     hide(ui_Checkbox0);
     hide(ui_Checkbox1);
-
+#endif
     lv_label_set_text(ui_val0, g->info);
 
     if (g->generic_slider[0].slider_label) {
         lv_label_set_text(ui_LabelSlider0, g->generic_slider[0].slider_label);
         lv_slider_set_value(ui_LabelSlider0, g->generic_slider[0].slider_pos, false);
-        lv_label_set_text(ui_val0, g->generic_slider[0].prop_val);
+        lv_label_set_text(ui_val0, g->generic_slider[0].prop_val_text);
         show(ui_LabelSlider0);
     }
 
     if (g->generic_slider[1].slider_label) {
         lv_label_set_text(ui_LabelSlider1, g->generic_slider[1].slider_label);
         lv_slider_set_value(ui_LabelSlider1, g->generic_slider[1].slider_pos, false);
-        lv_label_set_text(ui_val1, g->generic_slider[1].prop_val);
+        lv_label_set_text(ui_val1, g->generic_slider[1].prop_val_text);
         show(ui_LabelSlider1);
     }
 
     if (g->generic_slider[2].slider_label) {
         lv_label_set_text(ui_LabelSlider2, g->generic_slider[2].slider_label);
         lv_slider_set_value(ui_LabelSlider2, g->generic_slider[2].slider_pos, false);
-        lv_label_set_text(ui_val2, g->generic_slider[2].prop_val);
+        lv_label_set_text(ui_val2, g->generic_slider[2].prop_val_text);
         show(ui_LabelSlider2);
     }
 

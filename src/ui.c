@@ -21,6 +21,7 @@
 #include "log.h"
 
 #include "pedal.h"
+#include "generic_props_ctl.h"
 
 #define USE_DISPLAY_BACKGROUND
 #define DEFAULT_BG_R_COLOR     0x12
@@ -102,6 +103,8 @@ void load_screen_down(lv_obj_t * screen);
 bool insert_pedal(pedal_type_t type, int x);
 bool remove_pedal(int idx);
 void reset_panels_idx_positions();
+void load_screen_up(lv_obj_t * screen);
+void load_screen_down(lv_obj_t * screen);
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
@@ -151,6 +154,8 @@ enum {
 static void actionDiaProps(void)
 {
     LOG("actionDiaProps");
+    set_generic_props_ctl(&active_pedal->props.volume->generic_props);
+    load_screen_up(ui_genericPropScreen);
 }
 
 static void actionDiaMoveRight(void)
@@ -1264,6 +1269,7 @@ void ui_init(void)
 
     init_ScreenBoards();
     ScreenVolume_screen_init();
+    ui_genericPropScreen_screen_init();
 
     lv_disp_load_scr(ui_ScreenBoards);
 
