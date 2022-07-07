@@ -17,6 +17,11 @@
 #ifndef _PEDAL_H
 #define _PEDAL_H
 
+#define PRESSED_COLOR 0x72C250
+#define RELEASED_COLOR 0x47DFFF
+#define DRAG_BAD_AREA_COLOR 0xff0000
+#define DRAG_GOOD_AREA_COLOR 0x00ff00
+
 #ifdef __cplusplus
 extern "C" {
 #endif

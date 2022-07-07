@@ -35,7 +35,7 @@
 
 ///////////////////// VARIABLES ////////////////////
 
-bool    lock_screen_swipe = false;
+static bool    lock_screen_swipe = false;
 lv_color_t g_default_bg_color;  // global background color
 lv_color_t g_default_fg_color;  // global foreground color
 
@@ -136,11 +136,6 @@ static void dialog_hide()
 {
     lv_obj_add_flag(ui_DialogPanel, LV_OBJ_FLAG_HIDDEN);
 }
-
-#define PRESSED_COLOR 0x72C250
-#define RELEASED_COLOR 0x47DFFF
-#define DRAG_BAD_AREA_COLOR 0xff0000
-#define DRAG_GOOD_AREA_COLOR 0x00ff00
 
 enum {
     DIA_BT__PROPS,
