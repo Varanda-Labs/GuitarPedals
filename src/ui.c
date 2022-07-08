@@ -32,6 +32,7 @@
 #define DEFAULT_FG_G_COLOR     0xdf
 #define DEFAULT_FG_B_COLOR     0xff
 
+#define SHORT_PRESSING_MAX_TIME_MS 500
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -343,7 +344,7 @@ static void OnPedalEvent(lv_event_t * event)
             break;
         }
 
-        if (lv_tick_get() < start_time + 250) { // if pressed less than than 250 ms is a short pressing
+        if (lv_tick_get() < start_time + SHORT_PRESSING_MAX_TIME_MS) { // if pressed less than than 250 ms is a short pressing
             active_pedal = pedal;
             lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
             actionDiaProps();
@@ -935,12 +936,12 @@ void ScreenVolume_screen_init(void)
 
 void load_screen_up(lv_obj_t * screen)
 {
-    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, 0);
+    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_TOP, SCREE_LOAD_SPEED, 0, 0);
 }
 
 void load_screen_down(lv_obj_t * screen)
 {
-    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, 0);
+    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, SCREE_LOAD_SPEED, 0, 0);
 }
 
 bool add_pedal(pedal_type_t type, pedal_board_t * board)
