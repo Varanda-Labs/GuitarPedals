@@ -122,8 +122,6 @@ void OnSliderChange(lv_event_t * event)
 
     if (active_pedal && active_pedal->update_props_values_func_t) {
         active_pedal->update_props_values_func_t(active_pedal);
-//    if (g->generic_slider[idx].process_slider_input_func_t) {
-//        g->generic_slider[idx].process_slider_input_func_t(&g->generic_slider[idx]);
 
         // update value
         switch(idx){
@@ -141,34 +139,7 @@ void OnCheckChange(lv_event_t * event)
     g->generic_check[idx].check = lv_obj_has_state(event->target, LV_STATE_CHECKED);
 
     // update value
-//    switch(idx){
-//    case 0: lv_label_set_text(ui_val0, g->generic_slider[idx].prop_val_text); break;
-//    case 1: lv_label_set_text(ui_val1, g->generic_slider[idx].prop_val_text); break;
-//    case 2: lv_label_set_text(ui_val2, g->generic_slider[idx].prop_val_text); break;
-//    default: LOG_E("OnCheckChange: unexpected idx %d", idx); break;
-//    }
 
-//    if (g->generic_slider[idx].slider_label) {
-//        lv_label_set_text(ui_val0, g->generic_slider[idx].prop_val_text);
-//    }
-
-//    if (g->generic_slider[1].slider_label) {
-//        lv_label_set_text(ui_LabelSlider1, g->generic_slider[1].slider_label);
-//        set_slider_pos(ui_Slider1, 50);//g->generic_slider[1].slider_pos);
-//        lv_label_set_text(ui_val1, g->generic_slider[1].prop_val_text);
-//        show(ui_Slider1);
-//        show(ui_val1);
-//        show(ui_LabelSlider1);
-//    }
-
-//    if (g->generic_slider[2].slider_label) {
-//        lv_label_set_text(ui_LabelSlider2, g->generic_slider[2].slider_label);
-//        set_slider_pos(ui_Slider2, g->generic_slider[2].slider_pos);
-//        lv_label_set_text(ui_val2, g->generic_slider[2].prop_val_text);
-//        show(ui_Slider2);
-//        show(ui_val2);
-//        show(ui_LabelSlider2);
-//    }
 
 }
 
@@ -177,7 +148,7 @@ static void set_slider_pos(lv_obj_t * slider, int val)
     lv_slider_set_value(slider, val, LV_ANIM_OFF);
 }
 
-void set_generic_props_ctl(void * _pedal) //generic_props_ctl_t * generic_props_ctl)
+void set_generic_props_ctl(void * _pedal)
 {
     active_pedal = _pedal;
     g = &active_pedal->props.volume->generic_props; // generic_props_ctl;

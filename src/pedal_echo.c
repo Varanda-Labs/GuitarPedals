@@ -30,42 +30,6 @@ static const char * gain_text = { "Gain:"};
 
 static const char * check_text = { "Across R/L:"};
 
-
-static void new_context(pedal_t * pedal)
-{
-    LOG("New Echo");
-    pedal->props.echo = calloc(1, sizeof(pedal_props_echo_t));
-    if (! pedal->props.echo) {
-        LOG_E("new_context: no memo");
-    }
-
-    // enter default prop values:
-    pedal->props.volume->generic_props.info = info;
-
-    pedal->props.volume->generic_props.generic_slider[DELAY_SLIDER_IDX].slider_label = delay_text;
-    pedal->props.volume->generic_props.generic_slider[DELAY_SLIDER_IDX].slider_pos = 1;
-    snprintf(   pedal->props.volume->generic_props.generic_slider[DELAY_SLIDER_IDX].prop_val_text,
-                MAX_PROP_VAL_TEXT,
-                "%d ms",
-                10);
-
-    pedal->props.volume->generic_props.generic_slider[GAIN_SLIDER_IDX].slider_label = gain_text;
-    pedal->props.volume->generic_props.generic_slider[GAIN_SLIDER_IDX].slider_pos = 20;
-    snprintf(   pedal->props.volume->generic_props.generic_slider[GAIN_SLIDER_IDX].prop_val_text,
-                MAX_PROP_VAL_TEXT,
-                "%.2f",
-                0.2);
-
-    pedal->props.volume->generic_props.generic_check[0].check_label = check_text;
-}
-
-static void delete_context(pedal_t * pedal)
-{
-    LOG("Delete Echo");
-    free(pedal->props.echo);
-    pedal->props.echo = NULL;
-}
-
 static void update_props_values(pedal_t * pedal)
 {
     int val = pedal->props.echo->generic_props.generic_slider[DELAY_SLIDER_IDX].slider_pos;
@@ -89,6 +53,36 @@ static void update_props_values(pedal_t * pedal)
                 f_val);
 
 }
+
+static void new_context(pedal_t * pedal)
+{
+    LOG("New Echo");
+    pedal->props.echo = calloc(1, sizeof(pedal_props_echo_t));
+    if (! pedal->props.echo) {
+        LOG_E("new_context: no memo");
+    }
+
+    // enter default prop values:
+    pedal->props.echo->generic_props.info = info;
+
+    pedal->props.echo->generic_props.generic_slider[DELAY_SLIDER_IDX].slider_label = delay_text;
+    pedal->props.echo->generic_props.generic_slider[DELAY_SLIDER_IDX].slider_pos = 1;
+
+    pedal->props.echo->generic_props.generic_slider[GAIN_SLIDER_IDX].slider_label = gain_text;
+    pedal->props.echo->generic_props.generic_slider[GAIN_SLIDER_IDX].slider_pos = 20;
+
+    pedal->props.echo->generic_props.generic_check[0].check_label = check_text;
+    update_props_values(pedal);
+}
+
+static void delete_context(pedal_t * pedal)
+{
+    LOG("Delete Echo");
+    free(pedal->props.echo);
+    pedal->props.echo = NULL;
+}
+
+
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
                                                     int num_input_samples,

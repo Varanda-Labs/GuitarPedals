@@ -25,6 +25,17 @@ static const char * volume_label = { "Volume:"};
 
 #define VOLUME_SLIDER_IDX 1
 
+static void update_props_values(pedal_t * pedal)
+{
+    int val = pedal->props.volume->generic_props.generic_slider[VOLUME_SLIDER_IDX].slider_pos;
+    char * target_text = pedal->props.volume->generic_props.generic_slider[VOLUME_SLIDER_IDX].prop_val_text;
+
+    snprintf(   target_text,
+                MAX_PROP_VAL_TEXT,
+                "%d %%",
+                val);
+}
+
 static void new_context(pedal_t * pedal)
 {
     LOG("New Volume");
@@ -35,12 +46,12 @@ static void new_context(pedal_t * pedal)
 
     // enter default prop values:
     pedal->props.volume->generic_props.info = info;
+
+    // volume slider
     pedal->props.volume->generic_props.generic_slider[VOLUME_SLIDER_IDX].slider_label = volume_label;
     pedal->props.volume->generic_props.generic_slider[VOLUME_SLIDER_IDX].slider_pos = 100;
-    snprintf(   pedal->props.volume->generic_props.generic_slider[VOLUME_SLIDER_IDX].prop_val_text,
-                MAX_PROP_VAL_TEXT,
-                "%d %%",
-                100);
+
+    update_props_values(pedal);
 }
 
 static void delete_context(pedal_t * pedal)
@@ -67,6 +78,7 @@ void pedal_init_available_volume(void * _pedal)
     pedal->props.compressor = NULL,            // properties
     pedal->pedal_new_context_func_t = new_context;
     pedal->pedal_delete_context_func_t = delete_context;
+    pedal->update_props_values_func_t = update_props_values;
 
     pedal->process_audio = process_audio;
 

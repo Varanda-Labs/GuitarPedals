@@ -54,6 +54,8 @@ void pedal_init_available_compressor(void * _pedal)
     pedal->props.compressor = NULL,            // properties
     pedal->pedal_new_context_func_t = new_context;
     pedal->pedal_delete_context_func_t = delete_context;
+//    pedal->update_props_values_func_t = update_props_values;
+
 
     pedal->process_audio = process_audio;
 

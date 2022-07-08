@@ -149,7 +149,7 @@ enum {
 static void actionDiaProps(void)
 {
     LOG("actionDiaProps");
-    set_generic_props_ctl(active_pedal); //&active_pedal->props.volume->generic_props);
+    set_generic_props_ctl(active_pedal);
     load_screen_up(ui_genericPropScreen);
 }
 

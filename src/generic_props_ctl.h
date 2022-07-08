@@ -29,7 +29,6 @@ typedef struct generic_slider_st
     const char *    slider_label;                   // label
     int             slider_pos;                     // 0~100 position in/out
     char            prop_val_text[MAX_PROP_VAL_TEXT];    // val
-    void            (*process_slider_input_func_t) (struct generic_slider_st * generic_slider);
 } generic_slider_t;
 
 typedef struct generic_check_st
@@ -47,7 +46,7 @@ typedef struct generic_props_ctl_st
 } generic_props_ctl_t;
 
 extern void * ui_genericPropScreen;
-void set_generic_props_ctl(void * pedal); // generic_props_ctl_t * _generic_props_ctl);
+void set_generic_props_ctl(void * pedal);
 void ui_genericPropScreen_screen_init(void);
 
 
