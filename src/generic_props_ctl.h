@@ -47,8 +47,9 @@ typedef struct generic_props_ctl_st
 } generic_props_ctl_t;
 
 extern void * ui_genericPropScreen;
-void set_generic_props_ctl(generic_props_ctl_t * _generic_props_ctl);
+void set_generic_props_ctl(void * pedal); // generic_props_ctl_t * _generic_props_ctl);
 void ui_genericPropScreen_screen_init(void);
+
 
 
 #endif // GENERIC_PROPS_CTL_H

@@ -19,6 +19,7 @@
 #include "ui.h"
 #include "pedal.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 #define DELAY_SLIDER_IDX 0
 #define GAIN_SLIDER_IDX 2
@@ -65,6 +66,29 @@ static void delete_context(pedal_t * pedal)
     pedal->props.echo = NULL;
 }
 
+static void update_props_values(pedal_t * pedal)
+{
+    int val = pedal->props.echo->generic_props.generic_slider[DELAY_SLIDER_IDX].slider_pos;
+    char * target_text = pedal->props.echo->generic_props.generic_slider[DELAY_SLIDER_IDX].prop_val_text;
+
+    // val range is 0~500 ms, therefore:
+    val *= 5;
+    snprintf(   target_text,
+                MAX_PROP_VAL_TEXT,
+                "%d ms",
+                val);
+    // gain 100 -> 1.0
+    val = pedal->props.echo->generic_props.generic_slider[GAIN_SLIDER_IDX].slider_pos;
+    target_text = pedal->props.echo->generic_props.generic_slider[GAIN_SLIDER_IDX].prop_val_text;
+
+    // val range is 0~500 ms, therefore:
+    float f_val = val / 100.0;
+    snprintf(   target_text,
+                MAX_PROP_VAL_TEXT,
+                "%.2f",
+                f_val);
+
+}
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
                                                     int num_input_samples,
@@ -82,6 +106,7 @@ void pedal_init_available_echo(void * _pedal)
     pedal->props.compressor = NULL,            // properties
     pedal->pedal_new_context_func_t = new_context;
     pedal->pedal_delete_context_func_t = delete_context;
+    pedal->update_props_values_func_t = update_props_values;
 
     pedal->process_audio = process_audio;
 

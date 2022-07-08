@@ -51,6 +51,7 @@ typedef uint32_t    audio_sample_t;
 typedef audio_sample_t * (*process_audio_func_t) ( audio_sample_t * input,
                                                     int num_input_samples,
                                                     int * num_output_samples);
+
 typedef enum {
     PEDAL_TYPE__COMPRESSOR,
     PEDAL_TYPE__VOLUME,
@@ -80,6 +81,7 @@ typedef struct pedal_st
     props_t                 props;              // properties
     void                    (*pedal_new_context_func_t) (struct pedal_st * pedal);
     void                    (*pedal_delete_context_func_t) (struct pedal_st * pedal);
+    void                    (*update_props_values_func_t) (struct pedal_st * pedal);
 
     process_audio_func_t    process_audio;
 } pedal_t;
@@ -100,6 +102,7 @@ typedef struct boards_st
 
 typedef void (*pedal_new_context_func_t) (pedal_t * pedal);
 typedef void (*pedal_delete_context_func_t) (pedal_t * pedal);
+typedef void (*update_props_values_func_t) ( pedal_t * pedal);
 
 #ifdef __cplusplus
 }

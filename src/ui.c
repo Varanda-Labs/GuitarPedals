@@ -149,7 +149,7 @@ enum {
 static void actionDiaProps(void)
 {
     LOG("actionDiaProps");
-    set_generic_props_ctl(&active_pedal->props.volume->generic_props);
+    set_generic_props_ctl(active_pedal); //&active_pedal->props.volume->generic_props);
     load_screen_up(ui_genericPropScreen);
 }
 
@@ -1270,6 +1270,7 @@ void ui_init(void)
 
     // init pre-defined boards
     add_pedal(PEDAL_TYPE__DISTORTION, &boards[0]);
+    add_pedal(PEDAL_TYPE__ECHO, &boards[0]);
     add_pedal(PEDAL_TYPE__VOLUME, &boards[0]);
 
     // init pre-defined boards
