@@ -181,7 +181,7 @@ void set_generic_props_ctl(void * _pedal)
 
     if (g->generic_slider[1].slider_label) {
         lv_label_set_text(ui_LabelSlider1, g->generic_slider[1].slider_label);
-        set_slider_pos(ui_Slider1, 50);//g->generic_slider[1].slider_pos);
+        set_slider_pos(ui_Slider1, g->generic_slider[1].slider_pos);
         lv_label_set_text(ui_val1, g->generic_slider[1].prop_val_text);
         show(ui_Slider1);
         show(ui_val1);

@@ -187,12 +187,14 @@ static void actionDiaClose(void)
 
 static void OnDiaEvent(lv_event_t * event)
 {
+    //uint32_t start_time;
 
     switch(event->code) {
 
     case LV_EVENT_PRESSED:
         lv_obj_set_style_img_recolor_opa(event->target, 255, 0);
         lv_obj_set_style_img_recolor(event->target, lv_color_hex(PRESSED_COLOR), 0);
+        //start_time = lv_tick_get();
         break;
 
     case LV_EVENT_RELEASED:
@@ -302,6 +304,7 @@ static void OnPedalEvent(lv_event_t * event)
 {
     pedal_t * pedal =  (pedal_t *) event->user_data;
     static lv_coord_t h_scroll = 0;
+    static uint32_t start_time = 0;
 
     switch(event->code) {
     case LV_EVENT_CLICKED:
@@ -327,6 +330,7 @@ static void OnPedalEvent(lv_event_t * event)
         lv_obj_set_style_img_recolor(event->target, lv_color_hex(PRESSED_COLOR), 0);
         h_scroll = lv_obj_get_scroll_left(boards[board_idx].ui_BoardHContainer);
         lv_obj_set_style_img_recolor(pedal->widget, lv_color_hex(PRESSED_COLOR), 0);
+        start_time = lv_tick_get();
         break;
 
     case LV_EVENT_RELEASED:
@@ -336,6 +340,13 @@ static void OnPedalEvent(lv_event_t * event)
         if (h_scroll > 5) {
             LOG("ignore click as we had H scroll");
             lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
+            break;
+        }
+
+        if (lv_tick_get() < start_time + 250) { // if pressed less than than 250 ms is a short pressing
+            active_pedal = pedal;
+            lv_obj_set_style_img_recolor_opa(event->target, 0, 0);
+            actionDiaProps();
             break;
         }
 

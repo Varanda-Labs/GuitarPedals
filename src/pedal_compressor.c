@@ -20,6 +20,44 @@
 #include "pedal.h"
 #include <stdlib.h>
 
+#define SUSTAIN_SLIDER_IDX 0
+#define TONE_SLIDER_IDX 1
+#define ATTACK_SLIDER_IDX 2
+
+static const char * info = { "Plug-in: Compressor\nVersion: 0.0.1\nBy: Varanda Labs"};
+static const char * sustain_text = { "Sustain:"};
+static const char * tone_text = { "Tone:"};
+static const char * attack_text = { "Attack:"};
+
+static void update_props_values(pedal_t * pedal)
+{
+    // Sustain level
+    int val = pedal->props.compressor->generic_props.generic_slider[SUSTAIN_SLIDER_IDX].slider_pos;
+    char * target_text = pedal->props.compressor->generic_props.generic_slider[SUSTAIN_SLIDER_IDX].prop_val_text;
+
+    snprintf(   target_text,
+                MAX_PROP_VAL_TEXT,
+                "%d %%",
+                val);
+
+    // tone
+    val = pedal->props.compressor->generic_props.generic_slider[TONE_SLIDER_IDX].slider_pos;
+    target_text = pedal->props.compressor->generic_props.generic_slider[TONE_SLIDER_IDX].prop_val_text;
+
+     snprintf(   target_text,
+                MAX_PROP_VAL_TEXT,
+                "%d %%",
+                val);
+
+     val = pedal->props.compressor->generic_props.generic_slider[ATTACK_SLIDER_IDX].slider_pos;
+     target_text = pedal->props.compressor->generic_props.generic_slider[ATTACK_SLIDER_IDX].prop_val_text;
+
+      snprintf(   target_text,
+                 MAX_PROP_VAL_TEXT,
+                 "%d %%",
+                 val);
+
+}
 static void new_context(pedal_t * pedal)
 {
     LOG("New Compressor");
@@ -29,6 +67,18 @@ static void new_context(pedal_t * pedal)
     }
 
     // enter default prop values:
+    pedal->props.volume->generic_props.info = info;
+
+    pedal->props.volume->generic_props.generic_slider[SUSTAIN_SLIDER_IDX].slider_label = sustain_text;
+    pedal->props.volume->generic_props.generic_slider[SUSTAIN_SLIDER_IDX].slider_pos = 50;
+
+    pedal->props.volume->generic_props.generic_slider[TONE_SLIDER_IDX].slider_label = tone_text;
+    pedal->props.volume->generic_props.generic_slider[TONE_SLIDER_IDX].slider_pos = 50;
+
+    pedal->props.volume->generic_props.generic_slider[ATTACK_SLIDER_IDX].slider_label = attack_text;
+    pedal->props.volume->generic_props.generic_slider[ATTACK_SLIDER_IDX].slider_pos = 50;
+
+    update_props_values(pedal);
 }
 
 static void delete_context(pedal_t * pedal)
@@ -54,7 +104,7 @@ void pedal_init_available_compressor(void * _pedal)
     pedal->props.compressor = NULL,            // properties
     pedal->pedal_new_context_func_t = new_context;
     pedal->pedal_delete_context_func_t = delete_context;
-//    pedal->update_props_values_func_t = update_props_values;
+    pedal->update_props_values_func_t = update_props_values;
 
 
     pedal->process_audio = process_audio;

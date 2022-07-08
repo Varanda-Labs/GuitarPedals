@@ -27,7 +27,27 @@ static const char * info = { "Plug-in: Fuzz\nVersion: 0.0.1\nBy: Varanda Labs"};
 static const char * fuzz_text = { "Fuzz level:"};
 static const char * tone_text = { "Tone:"};
 
-static void update_props_values(pedal_t * pedal);
+static void update_props_values(pedal_t * pedal)
+{
+    // fuzz level
+    int val = pedal->props.fuzz->generic_props.generic_slider[FUZZ_SLIDER_IDX].slider_pos;
+    char * target_text = pedal->props.fuzz->generic_props.generic_slider[FUZZ_SLIDER_IDX].prop_val_text;
+
+    snprintf(   target_text,
+                MAX_PROP_VAL_TEXT,
+                "%d %%",
+                val);
+
+    // tone
+    val = pedal->props.fuzz->generic_props.generic_slider[TONE_SLIDER_IDX].slider_pos;
+    target_text = pedal->props.fuzz->generic_props.generic_slider[TONE_SLIDER_IDX].prop_val_text;
+
+     snprintf(   target_text,
+                MAX_PROP_VAL_TEXT,
+                "%d %%",
+                val);
+
+}
 
 static void new_context(pedal_t * pedal)
 {
@@ -54,28 +74,6 @@ static void delete_context(pedal_t * pedal)
     LOG("Delete Fuzz");
     free(pedal->props.fuzz);
     pedal->props.fuzz = NULL;
-}
-
-static void update_props_values(pedal_t * pedal)
-{
-    // fuzz level
-    int val = pedal->props.fuzz->generic_props.generic_slider[FUZZ_SLIDER_IDX].slider_pos;
-    char * target_text = pedal->props.fuzz->generic_props.generic_slider[FUZZ_SLIDER_IDX].prop_val_text;
-
-    snprintf(   target_text,
-                MAX_PROP_VAL_TEXT,
-                "%d %%",
-                val);
-
-    // tone
-    val = pedal->props.fuzz->generic_props.generic_slider[TONE_SLIDER_IDX].slider_pos;
-    target_text = pedal->props.fuzz->generic_props.generic_slider[TONE_SLIDER_IDX].prop_val_text;
-
-     snprintf(   target_text,
-                MAX_PROP_VAL_TEXT,
-                "%d %%",
-                val);
-
 }
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
