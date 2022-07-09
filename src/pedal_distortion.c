@@ -31,6 +31,7 @@ static void update_props_values(pedal_t * pedal)
 {
     // gain
     int val = pedal->props.distortion->generic_props.generic_slider[GAIN_SLIDER_IDX].slider_pos;
+    pedal->props.distortion->gain = val;
     char * target_text = pedal->props.distortion->generic_props.generic_slider[GAIN_SLIDER_IDX].prop_val_text;
 
     // gain (0~10 times)
@@ -42,6 +43,7 @@ static void update_props_values(pedal_t * pedal)
 
     // clipping (0~1)
     val = pedal->props.distortion->generic_props.generic_slider[CLIPPING_SLIDER_IDX].slider_pos;
+    pedal->props.distortion->clipping = val;
     target_text = pedal->props.distortion->generic_props.generic_slider[CLIPPING_SLIDER_IDX].prop_val_text;
 
      f_val = val/100.0;
@@ -80,9 +82,37 @@ static void delete_context(pedal_t * pedal)
 }
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
-                                                    int num_input_samples,
-                                                    int * num_output_samples)
+                                         int num_input_samples,
+                                         int * num_output_samples,
+                                         pedal_t * pedal)
 {
+    int i, c; //, i_left, i_right;
+
+    int16_t * ptr = (uint16_t *) input;
+    int32_t v;
+    //int16_t v16;
+    int gain = pedal->props.distortion->gain;
+    int clipping = (pedal->props.distortion->clipping * 32767) / 100;
+
+    for (i=0; i < num_input_samples/4; i++) {
+        for (c=0; c < 2; c++) {
+            v = *(ptr + c);
+            v = v * gain / 10;
+            if (v > 0) {
+                if (v > clipping) {
+                    v = clipping;
+                }
+                *(ptr + c) = (int16_t) v;
+            } else {
+                if (v < -clipping) {
+                    v = -clipping;
+                }
+                *(ptr + c) =  (int16_t) v;
+            }
+        }
+        ptr += 2;
+    }
+
     return NULL;
 }
 

@@ -90,7 +90,8 @@ static void delete_context(pedal_t * pedal)
 
 static audio_sample_t * process_audio(   audio_sample_t * input,
                                          int num_input_samples,
-                                         int * num_output_samples)
+                                         int * num_output_samples,
+                                         pedal_t * pedal)
 {
     return NULL;
 }

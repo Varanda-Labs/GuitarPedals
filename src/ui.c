@@ -62,6 +62,8 @@ lv_obj_t * ui_diaEnable;
 lv_obj_t * ui_diaClose;
 
 pedal_board_t boards[NUM_MAX_BOARDS];
+int board_idx = 0;
+
 pedal_t available_pedals[NUM_AVAILABLE_PADALS];
 
 lv_obj_t * ui_RightBottomPanelContainer;
@@ -83,7 +85,6 @@ pedal_t * active_pedal = NULL;
 extern lv_indev_t * global_indev;
 
 #define Y_OFFSET_ACROSS_BOARDS 89
-static int board_idx = 0;
 
 const void * numbers[10] = {
     &ui_img_number_0_png,
@@ -382,6 +383,7 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
         LOG("OnRightTopPanelContainerScrollBegin Pressed %d", point.y);
         start_y = 0;
         break;
+
     case LV_EVENT_PRESSING:
         lv_indev_get_vect(global_indev, &point);
         start_y += point.y;
@@ -398,6 +400,7 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
             lock_screen_swipe = true;
         }
         break;
+
     case LV_EVENT_RELEASED:
         LOG("OnRightTopPanelContainerScrollBegin Released");
         start_y = -1;
@@ -1305,5 +1308,6 @@ void ui_init(void)
     ui_Dialog_init();
     dialog_hide();
 }
+
 
 

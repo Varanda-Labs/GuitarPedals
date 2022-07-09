@@ -24,8 +24,8 @@
 typedef struct pedal_props_distortion_st
 {
     generic_props_ctl_t generic_props;
-//    int     gain;
-//    int     clipping;
+    int     gain;       // 0~100 (but gain 0~10 times)
+    int     clipping;   // 0~100
 } pedal_props_distortion_t;
 
 void pedal_init_available_distortion(void * pedal);

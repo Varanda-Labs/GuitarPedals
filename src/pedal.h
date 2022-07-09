@@ -84,7 +84,11 @@ typedef struct pedal_st
     void                    (*pedal_delete_context_func_t) (struct pedal_st * pedal);
     void                    (*update_props_values_func_t) (struct pedal_st * pedal);
 
-    process_audio_func_t    process_audio;
+    //process_audio_func_t    process_audio;
+    audio_sample_t *        (*process_audio) (  audio_sample_t * input,
+                                                int num_input_samples,
+                                                int * num_output_sample,
+                                                struct pedal_st * pedal);
 } pedal_t;
 
 typedef struct pedal_board_st
@@ -104,6 +108,9 @@ typedef struct boards_st
 typedef void (*pedal_new_context_func_t) (pedal_t * pedal);
 typedef void (*pedal_delete_context_func_t) (pedal_t * pedal);
 typedef void (*update_props_values_func_t) ( pedal_t * pedal);
+
+extern pedal_board_t boards[NUM_MAX_BOARDS];
+extern int board_idx;
 
 #ifdef __cplusplus
 }

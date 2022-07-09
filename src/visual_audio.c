@@ -19,10 +19,13 @@
 #include "ui_helpers.h"
 #include "pedal.h"
 #include "log.h"
+#include "util.h"
 
 ///////////////////// VARIABLES ////////////////////
 
 extern lv_indev_t * global_indev;
+
+static bool is_playing = false;
 
 lv_obj_t * ui_VisualScreen;
 static lv_obj_t * ui_PlayerPanel;
@@ -47,6 +50,29 @@ static bool    lock_screen_swipe = false;
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
+extern void start_player();
+extern void stop_player();
+
+static void OnPlayEvent(lv_event_t * event)
+{
+    if (event->code == LV_EVENT_CLICKED) {
+//        start_player();
+        is_playing = true;
+        hide(ui_playimg);
+        show(ui_stopimg);
+    }
+}
+
+static void OnStopPlayEvent(lv_event_t * event)
+{
+    if (event->code == LV_EVENT_CLICKED) {
+//        stop_player();
+        is_playing = false;
+        hide(ui_stopimg);
+        show(ui_playimg);
+    }
+}
+
 static void OnRightTopPanelContainerEvent(lv_event_t * event)
 {
     static int start_y = -1;
@@ -211,6 +237,9 @@ void init_VisualScreen_screen(void)
     lv_obj_add_flag(ui_playimg, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_playimg, LV_OBJ_FLAG_SCROLLABLE);
 
+    lv_obj_add_event_cb(ui_playimg, OnPlayEvent, LV_EVENT_ALL, NULL);
+    lv_obj_add_flag(ui_playimg, LV_OBJ_FLAG_CLICKABLE);
+
     // ui_stopimg
 
     ui_stopimg = lv_img_create(ui_VisualScreen);
@@ -226,6 +255,11 @@ void init_VisualScreen_screen(void)
 
     lv_obj_add_flag(ui_stopimg, LV_OBJ_FLAG_ADV_HITTEST);
     lv_obj_clear_flag(ui_stopimg, LV_OBJ_FLAG_SCROLLABLE);
+
+    lv_obj_add_event_cb(ui_stopimg, OnStopPlayEvent, LV_EVENT_ALL, NULL);
+    lv_obj_add_flag(ui_stopimg, LV_OBJ_FLAG_CLICKABLE);
+
+    hide(ui_stopimg);
 
     // ui_RightTopPanelContainer2
 
@@ -251,3 +285,27 @@ void init_VisualScreen_screen(void)
     lv_obj_add_flag(ui_RightTopPanelContainer2, LV_OBJ_FLAG_CLICKABLE);
 }
 
+void process_audio_frame(char * buffer, int len)
+{
+    if ( ! is_playing) {
+        if (len)
+            memset(buffer, 0, len);
+        return;
+    }
+#if 1
+    pedal_board_t * board = &boards[board_idx];
+
+    if (len < 4) return;
+    len = len & 0xfffffffc;
+    int i, n_out;
+
+    if (board->num_pedals > 0)
+    {
+        for (i=0; i < board->num_pedals; i++) {
+            if (board->pedals[i].process_audio) {
+                board->pedals[i].process_audio((uint32_t *) buffer, len, &n_out, &board->pedals[i]);
+            }
+        }
+    }
+#endif
+}
