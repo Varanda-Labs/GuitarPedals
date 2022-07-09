@@ -51,7 +51,7 @@ lv_obj_t * ui_RightArrowPedals;
 lv_obj_t * ui_RightArrowBoard;
 lv_obj_t * ui_BoardCounter;
 lv_obj_t * ui_BoardContainer;
-//lv_obj_t * ui_Screen1;
+
 lv_obj_t * ui_diaCheck;
 lv_obj_t * ui_DialogPanel;
 lv_obj_t * ui_diaProps;
@@ -98,6 +98,9 @@ const void * numbers[10] = {
     &ui_img_number_9_png,
 
 };
+
+extern void init_VisualScreen_screen(void);
+extern lv_obj_t * ui_VisualScreen;
 
 void load_screen_up(lv_obj_t * screen);
 void load_screen_down(lv_obj_t * screen);
@@ -386,12 +389,12 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
         if (lock_screen_swipe) break;
         if (start_y > 5) {
             start_y = 0;
-            load_screen_up(ScreenVolume);
+            load_screen_down(ui_VisualScreen);
             lock_screen_swipe = true;
         }
         if (start_y < -5) {
             start_y = 0;
-            load_screen_up(ScreenVolume);
+            load_screen_down(ui_VisualScreen);
             lock_screen_swipe = true;
         }
         break;
@@ -864,75 +867,75 @@ static void ui_event_CloseButton(lv_event_t * e)
 }
 
 //--- to move to volume file:
-void ScreenVolume_screen_init(void)
-{
-    // ScreenVolume
+//void ScreenVolume_screen_init(void)
+//{
+//    // ScreenVolume
 
-    ScreenVolume = lv_obj_create(NULL);
+//    ScreenVolume = lv_obj_create(NULL);
 
 
-    lv_obj_clear_flag(ScreenVolume, LV_OBJ_FLAG_SCROLLABLE);
+//    lv_obj_clear_flag(ScreenVolume, LV_OBJ_FLAG_SCROLLABLE);
 
-    lv_obj_set_style_bg_color(ScreenVolume, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+//    lv_obj_set_style_bg_color(ScreenVolume, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+//    lv_obj_set_style_bg_opa(ScreenVolume, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    // VolumeLabel
+//    // VolumeLabel
 
-    VolumeLabel = lv_label_create(ScreenVolume);
+//    VolumeLabel = lv_label_create(ScreenVolume);
 
-    lv_obj_set_width(VolumeLabel, LV_SIZE_CONTENT);
-    lv_obj_set_height(VolumeLabel, LV_SIZE_CONTENT);
+//    lv_obj_set_width(VolumeLabel, LV_SIZE_CONTENT);
+//    lv_obj_set_height(VolumeLabel, LV_SIZE_CONTENT);
 
-    lv_obj_set_x(VolumeLabel, -166);
-    lv_obj_set_y(VolumeLabel, -97);
+//    lv_obj_set_x(VolumeLabel, -166);
+//    lv_obj_set_y(VolumeLabel, -97);
 
-    lv_obj_set_align(VolumeLabel, LV_ALIGN_CENTER);
-    lv_obj_set_style_text_color(VolumeLabel, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
+//    lv_obj_set_align(VolumeLabel, LV_ALIGN_CENTER);
+//    lv_obj_set_style_text_color(VolumeLabel, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_text_opa(VolumeLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+//    lv_obj_set_style_text_opa(VolumeLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_label_set_text(VolumeLabel, "Plug-in: Volume\nVersion: 0.0.1\nBy: Varanda Labs");
+//    lv_label_set_text(VolumeLabel, "Plug-in: Volume\nVersion: 0.0.1\nBy: Varanda Labs");
 
-    // VolumeSlider
+//    // VolumeSlider
 
-    VolumeSlider = lv_slider_create(ScreenVolume);
+//    VolumeSlider = lv_slider_create(ScreenVolume);
 
-    static lv_style_t style_main;
+//    static lv_style_t style_main;
 
-    lv_slider_set_range(VolumeSlider, 0, 100);
+//    lv_slider_set_range(VolumeSlider, 0, 100);
 
-    lv_obj_set_width(VolumeSlider, 397);
-    lv_obj_set_height(VolumeSlider, 10);
+//    lv_obj_set_width(VolumeSlider, 397);
+//    lv_obj_set_height(VolumeSlider, 10);
 
-    lv_obj_set_x(VolumeSlider, 0);
-    lv_obj_set_y(VolumeSlider, 0);
+//    lv_obj_set_x(VolumeSlider, 0);
+//    lv_obj_set_y(VolumeSlider, 0);
 
-    lv_obj_set_align(VolumeSlider, LV_ALIGN_CENTER);
+//    lv_obj_set_align(VolumeSlider, LV_ALIGN_CENTER);
 
-    // CloseButton
-    VolumeCloseButton = lv_btn_create(ScreenVolume);
-    static lv_style_t style_btn;
-    lv_style_set_bg_color(&style_btn, g_default_bg_color);
-    lv_obj_add_style(VolumeCloseButton, &style_btn, 0);
+//    // CloseButton
+//    VolumeCloseButton = lv_btn_create(ScreenVolume);
+//    static lv_style_t style_btn;
+//    lv_style_set_bg_color(&style_btn, g_default_bg_color);
+//    lv_obj_add_style(VolumeCloseButton, &style_btn, 0);
 
-    lv_obj_set_width(VolumeCloseButton, 100);
-    lv_obj_set_height(VolumeCloseButton, 50);
+//    lv_obj_set_width(VolumeCloseButton, 100);
+//    lv_obj_set_height(VolumeCloseButton, 50);
 
-    lv_obj_set_x(VolumeCloseButton, 167);
-    lv_obj_set_y(VolumeCloseButton, 89);
+//    lv_obj_set_x(VolumeCloseButton, 167);
+//    lv_obj_set_y(VolumeCloseButton, 89);
 
-    lv_obj_set_align(VolumeCloseButton, LV_ALIGN_CENTER);
+//    lv_obj_set_align(VolumeCloseButton, LV_ALIGN_CENTER);
 
-    lv_obj_add_flag(VolumeCloseButton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
-    lv_obj_clear_flag(VolumeCloseButton, LV_OBJ_FLAG_SCROLLABLE);
+//    lv_obj_add_flag(VolumeCloseButton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+//    lv_obj_clear_flag(VolumeCloseButton, LV_OBJ_FLAG_SCROLLABLE);
 
-    lv_obj_add_event_cb(VolumeCloseButton, ui_event_CloseButton, LV_EVENT_ALL, NULL);
-    lv_obj_t * label = lv_label_create(VolumeCloseButton);
-    lv_obj_set_style_text_color(label, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
+//    lv_obj_add_event_cb(VolumeCloseButton, ui_event_CloseButton, LV_EVENT_ALL, NULL);
+//    lv_obj_t * label = lv_label_create(VolumeCloseButton);
+//    lv_obj_set_style_text_color(label, g_default_fg_color, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_label_set_text(label, "Return");
-    lv_obj_set_align(label, LV_ALIGN_CENTER);
-}
+//    lv_label_set_text(label, "Return");
+//    lv_obj_set_align(label, LV_ALIGN_CENTER);
+//}
 
 void load_screen_up(lv_obj_t * screen)
 {
@@ -1275,8 +1278,9 @@ void ui_init(void)
     lv_disp_set_bg_opa(dispp, 255);
 
     init_ScreenBoards();
-    ScreenVolume_screen_init();
+    //ScreenVolume_screen_init();
     ui_genericPropScreen_screen_init();
+    init_VisualScreen_screen();
 
     lv_disp_load_scr(ui_ScreenBoards);
 

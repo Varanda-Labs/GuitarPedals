@@ -75,7 +75,7 @@ static void hide(lv_obj_t * widget)
 static generic_props_ctl_t * g = NULL;
 
 
-static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
+static void OnRightTopPanelContainerEvent(lv_event_t * event)
 {
     static int start_y = -1;
     lv_point_t point;
@@ -85,14 +85,15 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
     {
     case LV_EVENT_PRESSED:             /**< The object has been pressed*/
         lv_indev_get_vect(global_indev, &point);
-        LOG("OnRightTopPanelContainerScrollBegin Pressed %d", point.y);
         start_y = 0;
         break;
+
     case LV_EVENT_PRESSING:
         lv_indev_get_vect(global_indev, &point);
         start_y += point.y;
-        LOG("OnRightTopPanelContainerScrollBegin Position %d", start_y);
+
         if (lock_screen_swipe) break;
+
         if (start_y > 5) {
             start_y = 0;
             lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, SCREE_LOAD_SPEED, 0, 0);
@@ -104,8 +105,8 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
             lock_screen_swipe = true;
         }
         break;
+
     case LV_EVENT_RELEASED:
-        LOG("OnRightTopPanelContainerScrollBegin Released");
         start_y = -1;
         lock_screen_swipe = false;
         break;
@@ -439,7 +440,7 @@ void ui_genericPropScreen_screen_init(void)
     lv_obj_set_style_bg_opa(ui_RightTopPanelContainer2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_RightTopPanelContainer2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_add_event_cb(ui_RightTopPanelContainer2, OnRightTopPanelContainerScrollBegin, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
+    lv_obj_add_event_cb(ui_RightTopPanelContainer2, OnRightTopPanelContainerEvent, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
     lv_obj_add_flag(ui_RightTopPanelContainer2, LV_OBJ_FLAG_CLICKABLE);
 
 }

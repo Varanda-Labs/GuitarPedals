@@ -88,6 +88,8 @@ LV_IMG_DECLARE(ui_img_boards_icon_png);    // assets/boards_icon.png
 LV_IMG_DECLARE(ui_img_pedal_fuzz_png);    // assets/Pedal_Fuzz.png
 LV_IMG_DECLARE(ui_img_pedal_compr_png);    // assets/Pedal_Compr.png
 
+LV_IMG_DECLARE(ui_img_play_icon_png);    // assets/play_icon.png
+LV_IMG_DECLARE(ui_img_stop_icon_png);    // assets/stop_icon.png
 
 void ui_init(void);
 
