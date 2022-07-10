@@ -86,31 +86,30 @@ static audio_sample_t * process_audio(   audio_sample_t * input,
                                          int * num_output_samples,
                                          pedal_t * pedal)
 {
-    int i, c; //, i_left, i_right;
+    int i; //, i_left, i_right;
 
     int16_t * ptr = (uint16_t *) input;
     int32_t v;
-    //int16_t v16;
+
     int gain = pedal->props.distortion->gain;
     int clipping = (pedal->props.distortion->clipping * 32767) / 100;
 
-    for (i=0; i < num_input_samples/4; i++) {
-        for (c=0; c < 2; c++) {
-            v = *(ptr + c);
+    for (i=0; i < num_input_samples/2; i++) {
+
+            v = *ptr;
             v = v * gain / 10;
             if (v > 0) {
                 if (v > clipping) {
                     v = clipping;
                 }
-                *(ptr + c) = (int16_t) v;
+                *ptr = (int16_t) v;
             } else {
                 if (v < -clipping) {
                     v = -clipping;
                 }
-                *(ptr + c) =  (int16_t) v;
+                *ptr =  (int16_t) v;
             }
-        }
-        ptr += 2;
+            ptr++;;
     }
 
     return NULL;

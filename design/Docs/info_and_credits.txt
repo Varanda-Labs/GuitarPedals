@@ -1,0 +1,20 @@
+
+NXP:
+===
+
+Get started:
+https://www.nxp.com/document/guide/get-started-with-the-mimxrt1060-evk:GS-MIMXRT1060-EVK
+
+
+
+Credits:
+=======
+
+Guitar photo:
+https://wordpress.org/openverse/image/c9174633-9e7c-48dd-a889-a870466435e6
+https://www.flickr.com/photos/44093058@N06/14680128637
+license: CC BY 2.0
+by: Blondinrikard Fröberg
+
+
+

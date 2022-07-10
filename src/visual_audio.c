@@ -48,7 +48,7 @@ static lv_obj_t * ui_RightTopPanelContainer2;
 
 static bool    lock_screen_swipe = false;
 
-#define CHART_RANGE 32787
+#define CHART_RANGE 24000 //32787
 #define NUM_SAMPLES_CHART 256
 static lv_coord_t chart_samples[NUM_SAMPLES_CHART];
 
@@ -308,7 +308,7 @@ void process_audio_frame(char * buffer, int len)
             memset(buffer, 0, len);
         return;
     }
-#if 1
+
     pedal_board_t * board = &boards[board_idx];
 
     if (len < 4) return;
@@ -323,7 +323,25 @@ void process_audio_frame(char * buffer, int len)
             }
         }
     }
+#if 1
+    if (len/8 > sizeof(chart_samples) / sizeof(lv_coord_t))
+    {
+        int v;
+        int16_t * ptr = (int16_t *) buffer;
+        lv_coord_t * dst = chart_samples;
+        for (int i=0; i < NUM_SAMPLES_CHART; i++) {
+            v = *ptr++ / 2;
+            v += *ptr++ / 2;
+            *dst++ = v;
 
+            // skip next L and R samples
+            ptr += 2;
+        }
+        //lv_chart_set_zoom_x(ui_Chart1, 256); //
+        lv_chart_refresh(ui_Chart1);
+    }
+
+#else
     if (len/4 > sizeof(chart_samples) / sizeof(lv_coord_t))
     {
         int v;
