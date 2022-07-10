@@ -21,7 +21,6 @@
 #define RELEASED_COLOR 0x47DFFF
 #define DRAG_BAD_AREA_COLOR 0xff0000
 #define DRAG_GOOD_AREA_COLOR 0x00ff00
-#define SCREE_LOAD_SPEED 300
 
 #ifdef __cplusplus
 extern "C" {

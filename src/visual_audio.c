@@ -97,12 +97,14 @@ static void OnRightTopPanelContainerEvent(lv_event_t * event)
 
         if (start_y > 5) {
             start_y = 0;
-            lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, SCREE_LOAD_SPEED, 0, 0);
+            //lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, SCREE_LOAD_SPEED, 0, 0);
+            load_screen_down(ui_ScreenBoards);
             lock_screen_swipe = true;
         }
         if (start_y < -5) {
             start_y = 0;
-            lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_TOP, SCREE_LOAD_SPEED, 0, 0);
+            //lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_TOP, SCREE_LOAD_SPEED, 0, 0);
+            load_screen_down(ui_ScreenBoards);
             lock_screen_swipe = true;
         }
         break;
