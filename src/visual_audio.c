@@ -24,6 +24,7 @@
 ///////////////////// VARIABLES ////////////////////
 
 extern lv_indev_t * global_indev;
+extern lv_obj_t * ui_AboutScreen;
 
 static bool is_playing = false;
 
@@ -97,14 +98,12 @@ static void OnRightTopPanelContainerEvent(lv_event_t * event)
 
         if (start_y > 5) {
             start_y = 0;
-            //lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, SCREE_LOAD_SPEED, 0, 0);
-            load_screen_down(ui_ScreenBoards);
+            load_screen_down(ui_AboutScreen);
             lock_screen_swipe = true;
         }
         if (start_y < -5) {
             start_y = 0;
-            //lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_TOP, SCREE_LOAD_SPEED, 0, 0);
-            load_screen_down(ui_ScreenBoards);
+            load_screen_up(ui_ScreenBoards);
             lock_screen_swipe = true;
         }
         break;

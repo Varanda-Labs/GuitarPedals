@@ -24,7 +24,6 @@
 #include "util.h"
 
 ///////////////////// VARIABLES ////////////////////
-//lv_obj_t * ui_genericPropScreen;
 
 extern lv_indev_t * global_indev;
 static pedal_t * active_pedal = NULL;
@@ -63,16 +62,6 @@ extern lv_color_t g_default_fg_color;  // global foreground color
 
 ///////////////////// FUNCTIONS ////////////////////
 
-//static void show(lv_obj_t * widget)
-//{
-//    lv_obj_clear_flag(widget, LV_OBJ_FLAG_HIDDEN);
-//}
-
-//static void hide(lv_obj_t * widget)
-//{
-//    lv_obj_add_flag(widget, LV_OBJ_FLAG_HIDDEN);
-//}
-
 static generic_props_ctl_t * g = NULL;
 
 
@@ -97,13 +86,6 @@ static void OnRightTopPanelContainerEvent(lv_event_t * event)
 
         if (start_y > 5) {
             start_y = 0;
-            //lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, SCREEN_LOAD_SPEED, 0, 0);
-            load_screen_down(ui_ScreenBoards);
-            lock_screen_swipe = true;
-        }
-        if (start_y < -5) {
-            start_y = 0;
-            //lv_scr_load_anim(ui_ScreenBoards, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, SCREEN_LOAD_SPEED, 0, 0);
             load_screen_down(ui_ScreenBoards);
             lock_screen_swipe = true;
         }

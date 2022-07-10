@@ -399,11 +399,11 @@ static void OnRightTopPanelContainerScrollBegin(lv_event_t * event)
             load_screen_down(ui_VisualScreen);
             lock_screen_swipe = true;
         }
-        if (start_y < -5) {
-            start_y = 0;
-            load_screen_down(ui_VisualScreen);
-            lock_screen_swipe = true;
-        }
+//        if (start_y < -5) {
+//            start_y = 0;
+//            load_screen_down(ui_VisualScreen);
+//            lock_screen_swipe = true;
+//        }
         break;
 
     case LV_EVENT_RELEASED:
