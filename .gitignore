@@ -51,11 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-design/cache
-design/backup
-design/dialog/backup/
-design/generic_props/backup
+cache**
 design/generic_props/code
-
+backup**
 .DS_Store**
 
