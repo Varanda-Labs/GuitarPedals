@@ -47,6 +47,10 @@ static lv_obj_t * ui_RightTopPanelContainer2;
 
 static bool    lock_screen_swipe = false;
 
+#define CHART_RANGE 32787
+#define NUM_SAMPLES_CHART 256
+static lv_coord_t chart_samples[NUM_SAMPLES_CHART];
+
 ///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
@@ -113,10 +117,14 @@ static void OnRightTopPanelContainerEvent(lv_event_t * event)
     }
 }
 ///////////////////// SCREENS ////////////////////
+
+
+
 void init_VisualScreen_screen(void)
 {
 
     // ui_VisualScreen
+    memset(chart_samples, 0, sizeof(chart_samples));
 
     ui_VisualScreen = lv_obj_create(NULL);
 
@@ -164,6 +172,13 @@ void init_VisualScreen_screen(void)
     lv_obj_set_style_line_opa(ui_Chart1, 255, LV_PART_ITEMS | LV_STATE_DEFAULT);
     lv_obj_set_style_line_color(ui_Chart1, lv_color_hex(0x47DFFF), LV_PART_ITEMS | LV_STATE_DEFAULT);
     lv_obj_set_style_line_opa(ui_Chart1, 255, LV_PART_ITEMS | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_size(ui_Chart1, 0, LV_PART_INDICATOR);
+    lv_chart_series_t * ser = lv_chart_add_series(ui_Chart1, lv_palette_main(LV_PALETTE_LIME), LV_CHART_AXIS_PRIMARY_Y);
+
+    lv_chart_set_range(ui_Chart1, LV_CHART_AXIS_PRIMARY_Y, -CHART_RANGE, CHART_RANGE);
+    lv_chart_set_point_count(ui_Chart1, NUM_SAMPLES_CHART);
+    lv_chart_set_ext_y_array(ui_Chart1, ser, (lv_coord_t *) chart_samples);
 
     // ui_GuitarOrPlayerSwitch
 
@@ -306,6 +321,20 @@ void process_audio_frame(char * buffer, int len)
                 board->pedals[i].process_audio((uint32_t *) buffer, len, &n_out, &board->pedals[i]);
             }
         }
+    }
+
+    if (len/4 > sizeof(chart_samples) / sizeof(lv_coord_t))
+    {
+        int v;
+        int16_t * ptr = (int16_t *) buffer;
+        lv_coord_t * dst = chart_samples;
+        for (int i=0; i < NUM_SAMPLES_CHART; i++) {
+            v = *ptr++ / 2;
+            v += *ptr++ / 2;
+            *dst++ = v;
+        }
+        //lv_chart_set_zoom_x(ui_Chart1, 256); //
+        lv_chart_refresh(ui_Chart1);
     }
 #endif
 }
