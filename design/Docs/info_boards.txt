@@ -1,0 +1,8 @@
+
+          STM32F508               STM32469                  NXP rt1060
+
+Audio.    WM8994ECS.              CS43L22                   WM8960
+
+lcd.     RK043FN48H-CT672B        FH26-25S-0.3SHW.          RK043FN66HS-CTG 220222
+
+         controller: OTA5180A                               controller: ST7282
