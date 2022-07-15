@@ -1238,5 +1238,11 @@ void ui_init(void)
     dialog_hide();
 }
 
+void lv_user_gui_init(void)
+{
+    printf("*** lv_user_gui_init ***");
+    // ui_init();
+}
+
 
 
