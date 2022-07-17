@@ -33,7 +33,7 @@ extern lv_obj_t * ui_VisualScreen;
 extern lv_indev_t * global_indev;
 
 lv_obj_t * ui_AnimLogoScreen;
-lv_obj_t * ui_AboutScreen;
+extern lv_obj_t * ui_AboutScreen;
 static bool    lock_screen_swipe = false;
 
 LV_IMG_DECLARE(ui_img_0000_png);    // assets/0000.png
@@ -172,36 +172,17 @@ static void OnRightTopPanelContainerEvent(lv_event_t * event)
 }
 
 ///////////////////// SCREENS ////////////////////
-void init_ui_about_screen(void)
-{
-
-    // ui_AnimLogoScreen
-
-    ui_AboutScreen = lv_obj_create(NULL);
-
-    lv_obj_clear_flag(ui_AboutScreen, LV_OBJ_FLAG_SCROLLABLE);
-
-    lv_obj_set_style_bg_color(ui_AboutScreen, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_AboutScreen, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_set_style_bg_img_src(ui_AboutScreen, &ui_img_about_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_add_event_cb(ui_AboutScreen, OnRightTopPanelContainerEvent, LV_EVENT_ALL, NULL);   /*Assign an event callback*/
-    lv_obj_add_flag(ui_AboutScreen, LV_OBJ_FLAG_CLICKABLE);
-}
 
 void init_ui_AnimLogoScreen_screen(void)
 {
 
-    // ui_AnimLogoScreen
+    //ui_AnimLogoScreen
 
     ui_AnimLogoScreen = lv_obj_create(NULL);
 
     lv_obj_clear_flag(ui_AnimLogoScreen, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_set_style_bg_img_src(ui_AnimLogoScreen, &ui_img_0000_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    init_ui_about_screen();
 
 }
 

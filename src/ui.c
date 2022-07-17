@@ -28,7 +28,7 @@ extern lv_indev_t * touch_indev;
 lv_indev_t * global_indev;
 #endif
 
-#define SHOW_LOGO
+//#define SHOW_LOGO
 
 #define USE_DISPLAY_BACKGROUND
 #define DEFAULT_BG_R_COLOR     0x12
@@ -91,8 +91,9 @@ pedal_t * active_pedal = NULL;
 
 extern lv_indev_t * global_indev;
 extern lv_obj_t * ui_AnimLogoScreen;
-void play_logo();
-void init_ui_AnimLogoScreen_screen(void);
+extern void play_logo();
+extern void init_ui_AnimLogoScreen_screen(void);
+extern void init_ui_about_screen(void);
 
 #define Y_OFFSET_ACROSS_BOARDS 89
 
@@ -1254,11 +1255,14 @@ void ui_init(void)
     lv_disp_set_bg_opa(dispp, 255);
 
     init_ScreenBoards();
-    init_ui_AnimLogoScreen_screen();
+
+
+    init_ui_about_screen();
     ui_genericPropScreen_screen_init();
     init_VisualScreen_screen();
 
 #ifdef SHOW_LOGO
+    init_ui_AnimLogoScreen_screen();
     lv_disp_load_scr(ui_AnimLogoScreen);
     play_logo();
 #else
