@@ -28,7 +28,7 @@ extern lv_indev_t * touch_indev;
 lv_indev_t * global_indev;
 #endif
 
-//#define SHOW_LOGO
+//#define SHOW_LOG
 
 #define USE_DISPLAY_BACKGROUND
 #define DEFAULT_BG_R_COLOR     0x12
