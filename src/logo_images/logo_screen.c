@@ -117,7 +117,8 @@ void animete(void * arg)
     img_idx++;
 
     if (img_idx == LAST_LOGO_IMAGE_IDX + 2) {
-        lv_scr_load_anim(ui_AboutScreen, LV_SCR_LOAD_ANIM_FADE_IN, SCREEN_LOAD_SPEED / 2, 0, 0);
+        //lv_scr_load_anim(ui_AboutScreen, LV_SCR_LOAD_ANIM_FADE_IN, SCREEN_LOAD_SPEED / 2, 0, 0);
+        lv_scr_load_anim(ui_AboutScreen, LV_SCR_LOAD_ANIM_FADE_ON, SCREEN_LOAD_SPEED / 2, 0, 0);
     }
 
     if (img_idx >= LAST_LOGO_IMAGE_IDX + 10) {
