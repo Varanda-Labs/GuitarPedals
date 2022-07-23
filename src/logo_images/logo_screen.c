@@ -24,7 +24,11 @@
 #include "util.h"
 
 #define LAST_LOGO_IMAGE_IDX 24
+#ifdef FULL_ANIMATION
 #define FRAME_TIME 150
+#else
+#define FRAME_TIME 200
+#endif
 
 ///////////////////// VARIABLES ////////////////////
 /// \brief ui_AnimLogoScreen
@@ -110,8 +114,11 @@ static const lv_img_dsc_t * images[] = {
 void animete(void * arg)
 {
     if (img_idx <= LAST_LOGO_IMAGE_IDX) {
-        lv_obj_set_style_bg_img_src(ui_AnimLogoScreen, images[img_idx++], LV_PART_MAIN | LV_STATE_DEFAULT);
-        LOG("update image %d", img_idx);
+    	if (images[img_idx]->data_size > 1) {
+    		lv_obj_set_style_bg_img_src(ui_AnimLogoScreen, images[img_idx], LV_PART_MAIN | LV_STATE_DEFAULT);
+    		//LOG("update image %d", img_idx);
+    	}
+    	img_idx++;
         return;
     }
     img_idx++;
